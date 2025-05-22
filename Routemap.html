@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_811ffbfbda88b6e101e7b53a306deba3 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+</head>
+<body>
+    
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:22:11 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:22:14 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:22:18 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:22:22 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:22:28 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:22:31 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:22:34 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:22:38 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:22:42 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:22:46 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:22:50 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:22:54 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:22:58 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:23:01 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:23:04 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:23:08 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:23:11 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:23:15 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:23:18 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:23:22 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:23:25 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:23:28 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:23:31 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:23:34 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:23:38 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:23:43 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:23:47 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:23:51 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:23:55 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:23:58 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:24:01 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:24:04 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:24:08 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:24:11 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:24:14 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:24:19 </div> 
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 22-05-2025 12:24:23 </div> 
+    
+<!-- Weather Tab UI -->
+<style>
+  #weatherTabContainer {
+    position: fixed;
+    top: 40%;
+    right: -200px; /* Most of the tab is hidden, 40px remains visible */
+    width: 200px;
+    z-index: 9999;
+    transition: right 0.5s ease;
+    font-family: sans-serif;
+  }
+
+  #weatherTabContainer:hover {
+    right: 0;
+  }
+
+  #weatherTabLabel {
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    transform: rotate(-90deg) translateY(-50%);
+    background-color: #222;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px 7px;
+    border-radius: 5px 5px 0 0;
+    cursor: pointer;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+  }
+
+  #weatherTab {
+    background-color: #222;
+    border: 1px solid #aaa;
+    padding: 10px;
+    box-shadow: -2px 2px 6px rgba(0,0,0,0.3);
+  }
+
+  #weatherWarning {
+    color: white;
+    background-color: red;
+    font-weight: bold;
+    text-align: center;
+    padding: 5px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    display: none;
+  }
+
+  #weatherContent {
+    font-size: 14px;
+    color: white;
+  }
+</style>
+
+<div id="weatherTabContainer">
+  <div id="weatherTabLabel">Weather</div>
+  <div id="weatherTab">
+    <div id="weatherWarning"></div>
+    <div id="weatherContent">Loading weather...</div>
+  </div>
+</div>
+
+<script src="weather_data.js"></script>
+<script>
+  window.addEventListener("load", () => {
+    const warningDiv = document.getElementById("weatherWarning");
+    const contentDiv = document.getElementById("weatherContent");
+
+    if (typeof weatherSummary !== 'undefined') {
+      contentDiv.innerText = weatherSummary;
+    }
+
+    if (typeof weatherWarning !== 'undefined' && weatherWarning.length > 0) {
+      warningDiv.innerText = weatherWarning;
+      warningDiv.style.display = "block";
+    }
+  });
+</script>
+    <script>var map = window.map;</script>
+    
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<script>
+let userLat, userLng;
+let routingControl;navigator.geolocation.getCurrentPosition(function(pos) { userLat = pos.coords.latitude; userLng = pos.coords.longitude;
+
+const userMarker = L.marker([userLat, userLng]).addTo(map);
+userMarker.bindPopup("Your Location").openPopup();
+
+});
+
+function routeTo(destLat, destLng) { if (!userLat || !userLng) { alert("GPS location not available."); return; } if (routingControl) map.removeControl(routingControl); routingControl = L.Routing.control({ waypoints: [ L.latLng(userLat, userLng), L.latLng(destLat, destLng) ], routeWhileDragging: false }).addTo(map); } </script> 
+    
+            <div class="folium-map" id="map_811ffbfbda88b6e101e7b53a306deba3" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_811ffbfbda88b6e101e7b53a306deba3 = L.map(
+                "map_811ffbfbda88b6e101e7b53a306deba3",
+                {
+                    center: [40.2379, -76.9223],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 10,
+  "zoomControl": true,
+  "preferCanvas": false,
+  "control": false,
+}
+
+                }
+            );
+            L.control.scale().addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+
+            
+
+        
+    
+            var tile_layer_7ae90a70b28feaa126021ab566e72235 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_7ae90a70b28feaa126021ab566e72235.addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var tile_layer_29b9bc7f6e84a398891dfdc9dff34d87 = L.tileLayer(
+                "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                {
+  "minZoom": 0,
+  "maxZoom": 18,
+  "maxNativeZoom": 18,
+  "noWrap": false,
+  "attribution": "Esri",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_29b9bc7f6e84a398891dfdc9dff34d87.addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var tile_layer_251b94d9e6b91d4692c7cd7fbde88777 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 18,
+  "maxNativeZoom": 18,
+  "noWrap": false,
+  "attribution": "Carto",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_251b94d9e6b91d4692c7cd7fbde88777.addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var tile_layer_212f9d8bf87b61080900782b7ce2d8f9 = L.tileLayer(
+                "https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+                {
+  "minZoom": 0,
+  "maxZoom": 18,
+  "maxNativeZoom": 18,
+  "noWrap": false,
+  "attribution": "Esri",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_212f9d8bf87b61080900782b7ce2d8f9.addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var layer_control_bc68967b04e08b1bd96aa3281f7b8a9b_layers = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_7ae90a70b28feaa126021ab566e72235,
+                    "Satellite" : tile_layer_29b9bc7f6e84a398891dfdc9dff34d87,
+                    "CartoDB Dark Matter" : tile_layer_251b94d9e6b91d4692c7cd7fbde88777,
+                    "Esri Street Map" : tile_layer_212f9d8bf87b61080900782b7ce2d8f9,
+                },
+                overlays :  {
+                },
+            };
+            let layer_control_bc68967b04e08b1bd96aa3281f7b8a9b = L.control.layers(
+                layer_control_bc68967b04e08b1bd96aa3281f7b8a9b_layers.base_layers,
+                layer_control_bc68967b04e08b1bd96aa3281f7b8a9b_layers.overlays,
+                {
+  "position": "bottomleft",
+  "collapsed": true,
+  "autoZIndex": true,
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+
+        
+    
+            var marker_1357b7a7554a4fced8701a579d7be32b = L.marker(
+                [40.1974413, -76.7285938],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_687ba4bed35c14e7e117348b42c31dd1 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_29867eff5f6a8136e6bfc22b740a902f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6177716a708eb5e0e2de4c686cf2d3d1 = $(`<div id="html_6177716a708eb5e0e2de4c686cf2d3d1" style="width: 100.0%; height: 100.0%;"> <b>Garage sale</b><br>Total gym, exercise equipment, large pet beds, mirrored all wood cabinet, exterior, resin bench glider, 2 matching cloth chairs, resin adjustable height folding snack tables, slate path stepping stones<br>226, North Pine Street, Middletown, Dauphin County, Pennsylvania, 17057, United States<br><br>📅Sat, May 24, 2025 ⏲8:00 am - 12:00 pm<br><a href="https://gsalr.com/garage-sale-middletown-pa-38316359.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.1974413, -76.7285938)">Get Directions</button> </div>`)[0];
+                popup_29867eff5f6a8136e6bfc22b740a902f.setContent(html_6177716a708eb5e0e2de4c686cf2d3d1);
+            
+        
+
+        marker_1357b7a7554a4fced8701a579d7be32b.bindPopup(popup_29867eff5f6a8136e6bfc22b740a902f)
+        ;
+
+        
+    
+    
+                marker_1357b7a7554a4fced8701a579d7be32b.setIcon(icon_687ba4bed35c14e7e117348b42c31dd1);
+            
+    
+            var marker_f7c9213f2ec241f7f7b609c5363e33b2 = L.marker(
+                [39.9986116, -76.7581059],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_24a0179cbfa34f82492f182220d6ba8b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e71c20e24349a219520acec31ee19524 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_3ec971c6938693fe15a7164ea333deba = $(`<div id="html_3ec971c6938693fe15a7164ea333deba" style="width: 100.0%; height: 100.0%;"> <b>Garage Sale - Down sizing household</b><br>Clothing, furniture, toys, tools, glass ware, crystal, holiday decorations<br>2340, Barrister Drive, Foustown, Manchester Township, York County, Pennsylvania, 17404, United States<br><br>📅Fri, May 23, 2025 ⏲8:00 am - 5:00 pm<br>📅Sat, May 24, 2025 ⏲8:00 am - 5:00 pm<br><a href="https://gsalr.com/garage-sale-down-sizing-york-pa-38261287.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(39.9986116, -76.7581059)">Get Directions</button> </div>`)[0];
+                popup_e71c20e24349a219520acec31ee19524.setContent(html_3ec971c6938693fe15a7164ea333deba);
+            
+        
+
+        marker_f7c9213f2ec241f7f7b609c5363e33b2.bindPopup(popup_e71c20e24349a219520acec31ee19524)
+        ;
+
+        
+    
+    
+                marker_f7c9213f2ec241f7f7b609c5363e33b2.setIcon(icon_24a0179cbfa34f82492f182220d6ba8b);
+            
+    
+            var marker_ae33bd8fed7a7a91059edbcc1e845e0a = L.marker(
+                [40.238779, -76.9315989],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_53c63b16c9105a54c525f58de0411e84 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_8b367470d12fc56a87a0c44a05c54fe6 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8d0349a19823002111fabea04c495717 = $(`<div id="html_8d0349a19823002111fabea04c495717" style="width: 100.0%; height: 100.0%;"> <b>Neighborhood Yard Sales</b><br>Multiple homes in Chestnut St,. Camp Hill having yard sales.   Lots of women's, men's, and large/XL boy's clothing. Household decor. Collectables. Jewelry. Purses. Shoes. Sports equipment. Baseball gear. Christmas decor. Hunting gear. And lots more!<br>3018, Chestnut Street, Camp Hill, Cumberland County, Pennsylvania, 17011, United States<br><br>📅Fri, May 23, 2025 ⏲7:00 am - 4:00 pm<br>📅Sat, May 24, 2025 ⏲7:00 am - 2:00 pm<br><a href="https://gsalr.com/neighborhood-yard-sales-camp-hill-pa-38312411.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.238779, -76.9315989)">Get Directions</button> </div>`)[0];
+                popup_8b367470d12fc56a87a0c44a05c54fe6.setContent(html_8d0349a19823002111fabea04c495717);
+            
+        
+
+        marker_ae33bd8fed7a7a91059edbcc1e845e0a.bindPopup(popup_8b367470d12fc56a87a0c44a05c54fe6)
+        ;
+
+        
+    
+    
+                marker_ae33bd8fed7a7a91059edbcc1e845e0a.setIcon(icon_53c63b16c9105a54c525f58de0411e84);
+            
+    
+            var marker_7356c38c563cecd9584d3064d6b800b2 = L.marker(
+                [40.3015298, -76.9389851],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_85ee5784dd036176b5c9f83aeec14a83 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_5ebf14ecf36c7436267e1ca6da7a3d94 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_24018e4c9df5867c7020317eab4a971d = $(`<div id="html_24018e4c9df5867c7020317eab4a971d" style="width: 100.0%; height: 100.0%;"> <b>Multi family yardsale</b><br>Too many household items to mention. Womens clothing, shoes, designer purses, games, toys, crystal lead pieces, some antiques, kitchen items, exercise equipment, books. Something for everyone!<br>69 Oliver Rd, Enola, PA 17025, USA<br><br>📅Fri, May 23, 2025 ⏲9:00 am - 1:00 pm<br>📅Sat, May 24, 2025 ⏲9:00 am - 1:00 pm<br><a href="https://gsalr.com/multi-family-yardsale-enola-pa-38314609.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.3015298, -76.9389851)">Get Directions</button> </div>`)[0];
+                popup_5ebf14ecf36c7436267e1ca6da7a3d94.setContent(html_24018e4c9df5867c7020317eab4a971d);
+            
+        
+
+        marker_7356c38c563cecd9584d3064d6b800b2.bindPopup(popup_5ebf14ecf36c7436267e1ca6da7a3d94)
+        ;
+
+        
+    
+    
+                marker_7356c38c563cecd9584d3064d6b800b2.setIcon(icon_85ee5784dd036176b5c9f83aeec14a83);
+            
+    
+            var marker_85628c288e7fc39cc83f5e88ce93e54d = L.marker(
+                [40.2942442, -76.8255447],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_940b6ccfe73b6a02412f27ffa88a5cf8 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_dc4576a4568c3906f3c3b4ed9edd04f2 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_bdff6ff97cbc3a28184a46e0cbd88592 = $(`<div id="html_bdff6ff97cbc3a28184a46e0cbd88592" style="width: 100.0%; height: 100.0%;"> <b>Neighborhood Yard Sale - Old Colonial Park - Harrisburg</b><br>We are having our annual neighborhood yard sale this Saturday, May 24th beginning at 8 AM.  As always, there will be a large array of items being offered.  A vast majority of our home owners don't begin to set up until 7:30 for our 8 AM sale so early birds may not make out so well.   The streets involved are Lexington, Madison, Concord, Franklin and Willow from Revere Street to 48th Street. These streets are located between Rt 22 (Jonestown Road) and Locust Lane, Harrisburg.<br>65 S Madison St, Harrisburg, PA 17109, USA<br><br>📅Sat, May 24, 2025 ⏲8:00 am - 12:00 pm<br><a href="https://gsalr.com/neighborhood-yard-sale-old-harrisburg-pa-38314441.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.2942442, -76.8255447)">Get Directions</button> </div>`)[0];
+                popup_dc4576a4568c3906f3c3b4ed9edd04f2.setContent(html_bdff6ff97cbc3a28184a46e0cbd88592);
+            
+        
+
+        marker_85628c288e7fc39cc83f5e88ce93e54d.bindPopup(popup_dc4576a4568c3906f3c3b4ed9edd04f2)
+        ;
+
+        
+    
+    
+                marker_85628c288e7fc39cc83f5e88ce93e54d.setIcon(icon_940b6ccfe73b6a02412f27ffa88a5cf8);
+            
+    
+            var marker_1b5785db1430e70341d1152f524942fc = L.marker(
+                [40.2167151, -76.8046863],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_dff79dc850daf286e29e279a85b5a7be = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_da6287e31d4eedf73e35d02fa0be84bc = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_fa014217fb243935e764eeef19ff69be = $(`<div id="html_fa014217fb243935e764eeef19ff69be" style="width: 100.0%; height: 100.0%;"> <b>Community yard sale</b><br>We will have everything in anything in this development, Friday and Saturday Memorial Day weekend. It is rain or shine from 7 AM to 1 PM. There will be food items, fresh baked goods and homemade strawberry jelly from local berries. Everything is priced to sell and negotiable.<br>2483, South 4th Street, Steelton, Dauphin County, Pennsylvania, 17113, United States<br><br>📅Fri, May 23, 2025 ⏲7:00 am - 3:00 pm<br>📅Sat, May 24, 2025 ⏲7:00 am - 3:00 pm<br><a href="https://gsalr.com/community-yard-sale-steelton-pa-38315955.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.2167151, -76.8046863)">Get Directions</button> </div>`)[0];
+                popup_da6287e31d4eedf73e35d02fa0be84bc.setContent(html_fa014217fb243935e764eeef19ff69be);
+            
+        
+
+        marker_1b5785db1430e70341d1152f524942fc.bindPopup(popup_da6287e31d4eedf73e35d02fa0be84bc)
+        ;
+
+        
+    
+    
+                marker_1b5785db1430e70341d1152f524942fc.setIcon(icon_dff79dc850daf286e29e279a85b5a7be);
+            
+    
+            var marker_de6d1ad1e4331e8eb07b7b914d6d931c = L.marker(
+                [40.3262695, -76.8883434],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_4d5c18dd3742ea909aca72732952afbd = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_7781515d91d2f2d35c3e5604f2fc1530 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ad74c92ba183d6df1736dbc0d1a0ebeb = $(`<div id="html_ad74c92ba183d6df1736dbc0d1a0ebeb" style="width: 100.0%; height: 100.0%;"> <b>Road to Emmaus Yard Sale</b><br>A multi-family yard sale held at Road to Emmaus Church. Find it at 5050 Linglestown Rd. in the Harrisburg area.<br>Linglestown Road, Harrisburg, Dauphin County, Pennsylvania, 17110, United States<br><br>📅Sat, May 24, 2025 ⏲7:00 am - 12:00 pm<br><a href="https://gsalr.com/road-to-emmaus-yard-harrisburg-pa-38283489.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.3262695, -76.8883434)">Get Directions</button> </div>`)[0];
+                popup_7781515d91d2f2d35c3e5604f2fc1530.setContent(html_ad74c92ba183d6df1736dbc0d1a0ebeb);
+            
+        
+
+        marker_de6d1ad1e4331e8eb07b7b914d6d931c.bindPopup(popup_7781515d91d2f2d35c3e5604f2fc1530)
+        ;
+
+        
+    
+    
+                marker_de6d1ad1e4331e8eb07b7b914d6d931c.setIcon(icon_4d5c18dd3742ea909aca72732952afbd);
+            
+    
+            var marker_d3275bfbd1e3551c68a0aa0775d4cc9c = L.marker(
+                [40.2617819, -77.0048772],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_0e8c6b8b7e8f0361070c91e404b8e255 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_a9303d0b1095f77f9775bbd6274df3da = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_1e05f518105e8a7bd282ebc9d37235bb = $(`<div id="html_1e05f518105e8a7bd282ebc9d37235bb" style="width: 100.0%; height: 100.0%;"> <b>Hampden Heights Yard Sale</b><br>Annual neighborhood yard sale Clothing of all sizes, shoes , coats, toys, and books, holiday, decor, sporting equipment, furniture, humidifier, household, decorations. We even have freebies something for everyone.<br>6346 N Powderhorn Rd, Mechanicsburg, PA 17050, USA<br><br>📅Fri, May 23, 2025 ⏲6:30 am - 1:00 pm<br>📅Sat, May 24, 2025 ⏲7:00 am - 1:00 pm<br><a href="https://gsalr.com/hampden-heights-yard-sale-mechanicsburg-pa-38290909.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.2617819, -77.0048772)">Get Directions</button> </div>`)[0];
+                popup_a9303d0b1095f77f9775bbd6274df3da.setContent(html_1e05f518105e8a7bd282ebc9d37235bb);
+            
+        
+
+        marker_d3275bfbd1e3551c68a0aa0775d4cc9c.bindPopup(popup_a9303d0b1095f77f9775bbd6274df3da)
+        ;
+
+        
+    
+    
+                marker_d3275bfbd1e3551c68a0aa0775d4cc9c.setIcon(icon_0e8c6b8b7e8f0361070c91e404b8e255);
+            
+    
+            var marker_fb45b99534b81f490adf7573b1c26471 = L.marker(
+                [40.2591122, -77.0091753],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_835f88f74e15db9baf639bd5ae15d3b5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_b9635ffe9d53df956a2f49516db59b8c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_010df4eccec1ed3bfb3127c9b3b7b1a6 = $(`<div id="html_010df4eccec1ed3bfb3127c9b3b7b1a6" style="width: 100.0%; height: 100.0%;"> <b>Multi-family yard sale in Bunkers Hill development, next to Hampden Heights.</b><br>Lots of clothing, most women's size small to size 10, costume jewelry, vintage Mickey Mouse watch, quilts,  women's shoes  size 7 and 8, women's purses, lots of decorative pieces( lots of Amish ),  many framed pictures and art,  lots of knick knacks, vintage table, rocker glider, some antiques and collectibles (number 5 crock and number 3 jug), misc. craft supplies........also a FREE section!<br>1223 Scenery Dr, Mechanicsburg, PA 17050, USA<br><br>📅Fri, May 23, 2025 ⏲7:00 am - 2:00 pm<br>📅Sat, May 24, 2025 ⏲7:00 am - 2:00 pm<br><a href="https://gsalr.com/multifamily-yard-sale-in-mechanicsburg-pa-38312815.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.2591122, -77.0091753)">Get Directions</button> </div>`)[0];
+                popup_b9635ffe9d53df956a2f49516db59b8c.setContent(html_010df4eccec1ed3bfb3127c9b3b7b1a6);
+            
+        
+
+        marker_fb45b99534b81f490adf7573b1c26471.bindPopup(popup_b9635ffe9d53df956a2f49516db59b8c)
+        ;
+
+        
+    
+    
+                marker_fb45b99534b81f490adf7573b1c26471.setIcon(icon_835f88f74e15db9baf639bd5ae15d3b5);
+            
+    
+            var marker_4ad9ed77ac9fc9698d3097a257359e75 = L.marker(
+                [40.27801059999999, -76.7314056],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_369f294e41a37b0a6b7564e21d6c49b8 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_f5457cfdd4a04ca877727d41755daee9 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_11dbf56bc2e40f73a4d020f7e29681ad = $(`<div id="html_11dbf56bc2e40f73a4d020f7e29681ad" style="width: 100.0%; height: 100.0%;"> <b>Yard / Garage Sale</b><br>Something for everyone, though no children's clothing and only a few toys. Household, vintage, adult clothing, potting/plant containers, some tools, etc...<br>79 Overview Dr, Hummelstown, PA 17036, USA<br><br>📅Fri, May 23, 2025 ⏲8:00 am - 2:00 pm<br>📅Sat, May 24, 2025 ⏲8:00 am - 2:00 pm<br>📅Sun, May 25, 2025 ⏲8:00 am - 2:00 pm<br><a href="https://gsalr.com/yard-garage-sale-hummelstown-pa-38315039.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.27801059999999, -76.7314056)">Get Directions</button> </div>`)[0];
+                popup_f5457cfdd4a04ca877727d41755daee9.setContent(html_11dbf56bc2e40f73a4d020f7e29681ad);
+            
+        
+
+        marker_4ad9ed77ac9fc9698d3097a257359e75.bindPopup(popup_f5457cfdd4a04ca877727d41755daee9)
+        ;
+
+        
+    
+    
+                marker_4ad9ed77ac9fc9698d3097a257359e75.setIcon(icon_369f294e41a37b0a6b7564e21d6c49b8);
+            
+    
+            var marker_c1350c29fb273e222f72f5fa63bc5ee2 = L.marker(
+                [40.1082273, -76.86527730000002],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_333fc4647e3f75d22fd3f699489c47c5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_589d7ac43fa6b683415fd21dcbb93b5d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f4f9722a9d02eb6c5ee47f4b645ba875 = $(`<div id="html_f4f9722a9d02eb6c5ee47f4b645ba875" style="width: 100.0%; height: 100.0%;"> <b>Multi-Family Garage Sale</b><br>Vintage Lundby Dollhouse, Vintage Holly Hobby Kitchen Playset, Antique Stove, Christmas Decorations & Decor, Lamps, Home Decor, Dinner Plates, Baskets, Soft Storage Bins, Soundbars, Stereo, Designer Shoes and Purses, Solar Pathway Lights, Motorcycle Wheel Chock, Fishing Rods & Reels, Duck and Geese Decoys, Complete Bedroom Set with Lamps & Bedding.<br>205 Krone Rd, Lewisberry, PA 17339, USA<br><br>📅Sat, May 24, 2025 ⏲7:30 am - 1:30 pm<br><a href="https://gsalr.com/multifamily-garage-sale-lewisberry-pa-38310741.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.1082273, -76.86527730000002)">Get Directions</button> </div>`)[0];
+                popup_589d7ac43fa6b683415fd21dcbb93b5d.setContent(html_f4f9722a9d02eb6c5ee47f4b645ba875);
+            
+        
+
+        marker_c1350c29fb273e222f72f5fa63bc5ee2.bindPopup(popup_589d7ac43fa6b683415fd21dcbb93b5d)
+        ;
+
+        
+    
+    
+                marker_c1350c29fb273e222f72f5fa63bc5ee2.setIcon(icon_333fc4647e3f75d22fd3f699489c47c5);
+            
+    
+            var marker_a9e0636ee3d95a2ffa512ae78cbe1300 = L.marker(
+                [40.2388206, -77.1905748],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_cbbe16b74dcfd1b85c691bdf5921057a = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_3a80135da9838b2cafd0c3fd4fbdcea1 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ccb0f2610250214d6cbd98134acae320 = $(`<div id="html_ccb0f2610250214d6cbd98134acae320" style="width: 100.0%; height: 100.0%;"> <b>Garage/Yard Sale Fri-Sat MAY 23-24 2218 Douglas Dr Carlisle 7-4</b><br>GARAGE IS FULL- sale 3 family 2218 Douglas Dr  - items priced, you can make offers !! Many NEW items great for everyone. SOME OF THE ITEMS ARE - SO MANY MORE NOT LISTED 12 speed 27” bikes mens & ladies, shop/ hand tools, woodworking/craft projects pieces, garden tools, New yard/home-auto tools, antique items, new half price personal care/beauty items, toys, dolls, books children to adult, Danielle Steel, Sci fiction, best selling authors Clancy, Grishman, Paterson , others, cookbooks, collectibles, puzzles 500 -1000 all pieces included!  Linens, kitchen items, collectable and every day glassware. SO MUCH MORE TOO MUCH TO LIST. SIGNS POSTED - Directions—from RT 34N, turn left at LAKEVIEW DR (first left after FUEL ON GAS, CONVENIENCE STORE, about ¾ mile past KARNS), bear right onto DARR DR, go to 2ND stop sign, turn right on DOUGLAS, to 2218<br>2218 Douglas Dr, Carlisle, PA 17013, USA<br><br>📅Fri, May 23, 2025 ⏲7:00 am - 4:00 pm<br>📅Sat, May 24, 2025 ⏲7:00 am - 4:00 pm<br><a href="https://gsalr.com/garageyard-sale-frisat-may-carlisle-pa-38316103.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.2388206, -77.1905748)">Get Directions</button> </div>`)[0];
+                popup_3a80135da9838b2cafd0c3fd4fbdcea1.setContent(html_ccb0f2610250214d6cbd98134acae320);
+            
+        
+
+        marker_a9e0636ee3d95a2ffa512ae78cbe1300.bindPopup(popup_3a80135da9838b2cafd0c3fd4fbdcea1)
+        ;
+
+        
+    
+    
+                marker_a9e0636ee3d95a2ffa512ae78cbe1300.setIcon(icon_cbbe16b74dcfd1b85c691bdf5921057a);
+            
+    
+            var marker_97bedb3874039c58b8131852c9a9a169 = L.marker(
+                [40.3151605, -76.5758919],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_452ea604d4f53a854e7ad053a236e6e3 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_788efc3c7a277df38ea780aa1bfc3124 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4ceaba473e0ecb948c1786ec38655e44 = $(`<div id="html_4ceaba473e0ecb948c1786ec38655e44" style="width: 100.0%; height: 100.0%;"> <b>Annual Spring Yard Sale</b><br>Ceramic Christmas tree, tools, stereos, electronics, cds,records, ego push mower, household, furniture and much more. Weather permitting.<br>15 Brunswick Ln, Palmyra, PA 17078, USA<br><br>📅Fri, May 23, 2025 ⏲7:00 am - 12:00 pm<br>📅Sat, May 24, 2025 ⏲7:00 am - 12:00 pm<br><a href="https://gsalr.com/annual-spring-yard-sale-palmyra-pa-38315231.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.3151605, -76.5758919)">Get Directions</button> </div>`)[0];
+                popup_788efc3c7a277df38ea780aa1bfc3124.setContent(html_4ceaba473e0ecb948c1786ec38655e44);
+            
+        
+
+        marker_97bedb3874039c58b8131852c9a9a169.bindPopup(popup_788efc3c7a277df38ea780aa1bfc3124)
+        ;
+
+        
+    
+    
+                marker_97bedb3874039c58b8131852c9a9a169.setIcon(icon_452ea604d4f53a854e7ad053a236e6e3);
+            
+    
+            var marker_5402936d99e2101523031d1fc5ccc67c = L.marker(
+                [40.17369, -77.228316],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_e59eaac8bcedeb392ff02f057127190a = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_929d1dde71a85a3dc57b6c36d83687e4 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c322376fd017c5c115b2b7aeffd28e2c = $(`<div id="html_c322376fd017c5c115b2b7aeffd28e2c" style="width: 100.0%; height: 100.0%;"> <b>Garage Sale</b><br>Baby shower decor, Christmas/Halloween decor, home decor, dog items, books, antiques and much more!<br>1408, Walnut Bottom Road, South Middleton Township, Cumberland County, Pennsylvania, 17015, United States<br><br>📅Fri, May 23, 2025 ⏲8:00 am - 12:00 pm<br>📅Sat, May 24, 2025 ⏲8:00 am - 12:00 pm<br><a href="https://gsalr.com/garage-sale-carlisle-pa-38310831.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.17369, -77.228316)">Get Directions</button> </div>`)[0];
+                popup_929d1dde71a85a3dc57b6c36d83687e4.setContent(html_c322376fd017c5c115b2b7aeffd28e2c);
+            
+        
+
+        marker_5402936d99e2101523031d1fc5ccc67c.bindPopup(popup_929d1dde71a85a3dc57b6c36d83687e4)
+        ;
+
+        
+    
+    
+                marker_5402936d99e2101523031d1fc5ccc67c.setIcon(icon_e59eaac8bcedeb392ff02f057127190a);
+            
+    
+            var marker_d34476d832ab1478d96d9e5e6fe8a68b = L.marker(
+                [39.9806245, -76.7832821],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_d72843c2f3d32d01e17d05af1f43817f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d5c5e37712f52e7289d1d6181f7ab5e9 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_55a359a577f1fcddce1f86c9094a9d58 = $(`<div id="html_55a359a577f1fcddce1f86c9094a9d58" style="width: 100.0%; height: 100.0%;"> <b>Yard sale</b><br>Small furniture, household goods, Holiday decorations, Bike, exercise bike, Silk and plastic flowers, kitchen items, pictures,<br>1895, Normandie Drive, Barrington Place, Shiloh, York, York County, Pennsylvania, 17408, United States<br><br>📅Fri, May 23, 2025 ⏲9:00 am - 2:00 pm<br>📅Sat, May 24, 2025 ⏲9:00 am - 2:00 pm<br><a href="https://gsalr.com/yard-sale-york-pa-38311083.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(39.9806245, -76.7832821)">Get Directions</button> </div>`)[0];
+                popup_d5c5e37712f52e7289d1d6181f7ab5e9.setContent(html_55a359a577f1fcddce1f86c9094a9d58);
+            
+        
+
+        marker_d34476d832ab1478d96d9e5e6fe8a68b.bindPopup(popup_d5c5e37712f52e7289d1d6181f7ab5e9)
+        ;
+
+        
+    
+    
+                marker_d34476d832ab1478d96d9e5e6fe8a68b.setIcon(icon_d72843c2f3d32d01e17d05af1f43817f);
+            
+    
+            var marker_f2653b5be84b34dc0d2108bcd7c82ca3 = L.marker(
+                [39.9694965, -76.83131410000001],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_586fbf67cbfc5c3c5606a5459a83bb22 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_bfab1032d4423d473ada4f15e9df7467 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d4d0e292858252340631990af3ed47b8 = $(`<div id="html_d4d0e292858252340631990af3ed47b8" style="width: 100.0%; height: 100.0%;"> <b>New Creation Community Church Yard Sale</b><br>Huge church yard sale!! Something for everyone.  Clothes, handbags, shoes, backpacks, books, dvd’s, stuffed bears, suitcases, wine glasses,  dishes, snowboards, clothes hampers, healthcare products, vases, jewelry, musical instruments,  sports equipment, etc. So much more!! Come out and enjoy this sale.<br>3005 Emig Mill Rd, Dover, PA 17315, USA<br><br>📅Sat, May 24, 2025 ⏲8:00 am - 2:00 pm<br><a href="https://gsalr.com/new-creation-community-church-dover-pa-38316241.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(39.9694965, -76.83131410000001)">Get Directions</button> </div>`)[0];
+                popup_bfab1032d4423d473ada4f15e9df7467.setContent(html_d4d0e292858252340631990af3ed47b8);
+            
+        
+
+        marker_f2653b5be84b34dc0d2108bcd7c82ca3.bindPopup(popup_bfab1032d4423d473ada4f15e9df7467)
+        ;
+
+        
+    
+    
+                marker_f2653b5be84b34dc0d2108bcd7c82ca3.setIcon(icon_586fbf67cbfc5c3c5606a5459a83bb22);
+            
+    
+            var marker_4230f4dfc3dcaac8d600474813efddfa = L.marker(
+                [39.9699873, -76.7961983],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_40be4b8d1bb994e413ab499dc11a73ae = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_3c946419b80480e2bf0cd4b718a07e84 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_50eb402e072c10f6a1f189d422aac7e9 = $(`<div id="html_50eb402e072c10f6a1f189d422aac7e9" style="width: 100.0%; height: 100.0%;"> <b>Yard/Moving sale combination - diverse collection of items</b><br>Furniture - 2 wooden end tables, wooden garbage can holder, multiple lamps - 3 Tiffany, some toys, kitchen items, old hobby cars, tin tubs, Winross trucks, pool stick holder, etc<br>1935, Brenda Road, York, York County, Pennsylvania, 17408, United States<br><br>📅Fri, May 23, 2025 ⏲8:00 am - 5:00 pm<br>📅Sat, May 24, 2025 ⏲8:00 am - 2:00 pm<br><a href="https://gsalr.com/yardmoving-sale-combination-diverse-york-pa-38313765.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(39.9699873, -76.7961983)">Get Directions</button> </div>`)[0];
+                popup_3c946419b80480e2bf0cd4b718a07e84.setContent(html_50eb402e072c10f6a1f189d422aac7e9);
+            
+        
+
+        marker_4230f4dfc3dcaac8d600474813efddfa.bindPopup(popup_3c946419b80480e2bf0cd4b718a07e84)
+        ;
+
+        
+    
+    
+                marker_4230f4dfc3dcaac8d600474813efddfa.setIcon(icon_40be4b8d1bb994e413ab499dc11a73ae);
+            
+    
+            var marker_03feae2500cae53fc3def37ab9024719 = L.marker(
+                [40.3483409, -76.46674399999999],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_297dcc7f40e55f7a0f5e6a2340c53a42 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_8c4cff685d1b3fef85aa4e2c1a6c210f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_431b98bb1294b2ea531150e86b0fcd33 = $(`<div id="html_431b98bb1294b2ea531150e86b0fcd33" style="width: 100.0%; height: 100.0%;"> <b>Yard estate sale</b><br>Large yard estate sale May 23rd and 24th 7 until 3014 Tunnel Hill road. Lebanon, camping, fishing rods and lures  tools. Yard equipment toys trains Barbie monster High little people matchbox, megabloks, lego  models NASCAR. Ertl bradford exchange christmas items lamps household goods a lot of  clothing including mens western shirts belt buckles harley and nascar shirts womens clothing including prom and Bridesmaid dresses and shoes fur coat dvd,cd ,cassettes audiobooks books And miscellaneous Construction items. Door knobs face plates screws bolts. Some still in original packaging.<br>3014 Tunnel Hill Rd, Lebanon, PA 17046, USA<br><br>📅Fri, May 23, 2025 ⏲7:00 am - 3:00 pm<br>📅Sat, May 24, 2025 ⏲7:00 am - 3:00 pm<br><a href="https://gsalr.com/yard-estate-sale-lebanon-pa-38311495.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.3483409, -76.46674399999999)">Get Directions</button> </div>`)[0];
+                popup_8c4cff685d1b3fef85aa4e2c1a6c210f.setContent(html_431b98bb1294b2ea531150e86b0fcd33);
+            
+        
+
+        marker_03feae2500cae53fc3def37ab9024719.bindPopup(popup_8c4cff685d1b3fef85aa4e2c1a6c210f)
+        ;
+
+        
+    
+    
+                marker_03feae2500cae53fc3def37ab9024719.setIcon(icon_297dcc7f40e55f7a0f5e6a2340c53a42);
+            
+    
+            var marker_1c6af6096812037cdea227bf4359fcb8 = L.marker(
+                [39.9954111, -76.6451557],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_233af73a42f5477811a08ee42a828ccf = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_538aeba44f282ef332e5fa6e2b0a72ea = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4972888c863e771b4e9a5cb516a597aa = $(`<div id="html_4972888c863e771b4e9a5cb516a597aa" style="width: 100.0%; height: 100.0%;"> <b>Neighborhood Yard Sale</b><br>Washington Square Neighborhood Yard Sale. (Silver Spur, Tarpley & Kings Arms) Fri. May 23rd & Sat 24th. 8:00 am - 2:00 pm.   11 Homes participating  One neighbor grilling on Tarpley for lunch. See Map<br>3870, Tarpley Drive, Spring Plains, Springettsbury Township, York County, Pennsylvania, 17402, United States<br><br>📅Fri, May 23, 2025 ⏲8:00 am - 2:00 pm<br>📅Sat, May 24, 2025 ⏲8:00 am - 2:00 pm<br><a href="https://gsalr.com/neighborhood-yard-sale-york-pa-38309415.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(39.9954111, -76.6451557)">Get Directions</button> </div>`)[0];
+                popup_538aeba44f282ef332e5fa6e2b0a72ea.setContent(html_4972888c863e771b4e9a5cb516a597aa);
+            
+        
+
+        marker_1c6af6096812037cdea227bf4359fcb8.bindPopup(popup_538aeba44f282ef332e5fa6e2b0a72ea)
+        ;
+
+        
+    
+    
+                marker_1c6af6096812037cdea227bf4359fcb8.setIcon(icon_233af73a42f5477811a08ee42a828ccf);
+            
+    
+            var marker_55e6aa691a9d642ec884fe303282d60b = L.marker(
+                [39.9603537, -76.6558183],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_648057480de910a3aaf274602de89b76 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_37b02ed87ae365b125dcf69f3c18516f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_bdcc20cc281af242ef337948ef920137 = $(`<div id="html_bdcc20cc281af242ef337948ef920137" style="width: 100.0%; height: 100.0%;"> <b>Final yard sale and everything must go!</b><br>Final yard sale, everything must go.  May 23 and 24th 8am to 1pm.  Coffee table, shelves, toys and games, Michael Kor and Bagglini, and Dooney and Burke, video gaming chairs, household items, seasonal decor.  2 women’s motorcycle helmets.<br>200, Knob Creek Lane, Longview Heights, Longstown, Windsor Township, York County, Pennsylvania, 17402, United States<br><br>📅Fri, May 23, 2025 ⏲8:00 am - 1:00 pm<br>📅Sat, May 24, 2025 ⏲8:00 am - 1:00 pm<br><a href="https://gsalr.com/final-yard-sale-and-york-pa-38310965.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(39.9603537, -76.6558183)">Get Directions</button> </div>`)[0];
+                popup_37b02ed87ae365b125dcf69f3c18516f.setContent(html_bdcc20cc281af242ef337948ef920137);
+            
+        
+
+        marker_55e6aa691a9d642ec884fe303282d60b.bindPopup(popup_37b02ed87ae365b125dcf69f3c18516f)
+        ;
+
+        
+    
+    
+                marker_55e6aa691a9d642ec884fe303282d60b.setIcon(icon_648057480de910a3aaf274602de89b76);
+            
+    
+            var marker_010d53546716b994656c2d0ca736830c = L.marker(
+                [40.3323984, -76.3916865],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_a4f78e909a6489b2c77a7fa85e1981ff = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_8c7363e3037e2f5f91c2fa06ed121897 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e3d107da2b0b2c7065e0bafef315cda9 = $(`<div id="html_e3d107da2b0b2c7065e0bafef315cda9" style="width: 100.0%; height: 100.0%;"> <b>Garage Estate Sale</b><br>Indoor Outdoor Estate Sale …. 3 a queen bedroom suit, a contemporary queen bed frame , a single cream sleigh bed with mattress and bedding, lots of home decor items, lots of tools, lots of kitchen items, bathroom items, furniture for living rooms .. more than I can list<br>357, Acorn Circle, South Lebanon Township, Lebanon County, Pennsylvania, 17042, United States<br><br>📅Sat, May 24, 2025 ⏲7:00 am - 1:00 pm<br><a href="https://gsalr.com/garage-estate-sale-lebanon-pa-38311277.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.3323984, -76.3916865)">Get Directions</button> </div>`)[0];
+                popup_8c7363e3037e2f5f91c2fa06ed121897.setContent(html_e3d107da2b0b2c7065e0bafef315cda9);
+            
+        
+
+        marker_010d53546716b994656c2d0ca736830c.bindPopup(popup_8c7363e3037e2f5f91c2fa06ed121897)
+        ;
+
+        
+    
+    
+                marker_010d53546716b994656c2d0ca736830c.setIcon(icon_a4f78e909a6489b2c77a7fa85e1981ff);
+            
+    
+            var marker_00cc1588ac79f8eb062e7bdb78124280 = L.marker(
+                [40.0885328, -76.3984933],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_bdf4ff906e3697e83c3d09180fe5571f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_ad1243628ae9ebb26900ef5928e06a8d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d76aaa03ca5458327edd744e7ee9b518 = $(`<div id="html_d76aaa03ca5458327edd744e7ee9b518" style="width: 100.0%; height: 100.0%;"> <b>Huge 3 Day Garage Sale</b><br>Sale Days:   FRI, SAT, MON (Memorial Day).   7AM - 1 PM. Rain or Shine. Cameras, fishing tackle box full of lures, antique augers, lawn equipment, grill accessories, hunting overalls, 14” air fryer (barely used), small kitchen appliances, bakeware, cooking utensils, 22”  Samsung HD TV, 17” HP computer monitor, Panasonic cordless 3 phone set with answering machine, cassette case with 23 1960s rock ‘n’ roll cassettes, cut glass decanters, home decor, and much, much more! Something for everyone. CASH ONLY<br>1520, English Brook Drive, Landisville, East Hempfield Township, Lancaster County, Pennsylvania, 17538, United States<br><br>📅Fri, May 23, 2025 ⏲7:00 am - 1:00 pm<br>📅Sat, May 24, 2025 ⏲7:00 am - 1:00 pm<br>📅Sun, May 25, 2025 ⏲7:00 am - 1:00 pm<br>📅Mon, May 26, 2025 ⏲7:00 am - 1:00 pm<br><a href="https://gsalr.com/huge-3-day-garage-landisville-pa-38316129.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.0885328, -76.3984933)">Get Directions</button> </div>`)[0];
+                popup_ad1243628ae9ebb26900ef5928e06a8d.setContent(html_d76aaa03ca5458327edd744e7ee9b518);
+            
+        
+
+        marker_00cc1588ac79f8eb062e7bdb78124280.bindPopup(popup_ad1243628ae9ebb26900ef5928e06a8d)
+        ;
+
+        
+    
+    
+                marker_00cc1588ac79f8eb062e7bdb78124280.setIcon(icon_bdf4ff906e3697e83c3d09180fe5571f);
+            
+    
+            var marker_1b6bdedff6625b93efbfc2acdf1f51ba = L.marker(
+                [39.901353, -76.639704],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_7420993f0e8beac572b943f930b6d3d9 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_0f6d830160b169b9d66949e01a457593 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8b1cb011144a51168b334ca33df3fc84 = $(`<div id="html_8b1cb011144a51168b334ca33df3fc84" style="width: 100.0%; height: 100.0%;"> <b>Yardsale</b><br>Women's, men's and Junior's clothing. Shoes, purses, decor, holiday items, household items & much much more<br>100, North Pleasant Avenue, Dallastown, York County, Pennsylvania, 17313, United States<br><br>📅Fri, May 23, 2025 ⏲8:00 am - 3:00 pm<br>📅Sat, May 24, 2025 ⏲8:00 am - 3:00 pm<br><a href="https://gsalr.com/yardsale-dallastown-pa-38312941.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(39.901353, -76.639704)">Get Directions</button> </div>`)[0];
+                popup_0f6d830160b169b9d66949e01a457593.setContent(html_8b1cb011144a51168b334ca33df3fc84);
+            
+        
+
+        marker_1b6bdedff6625b93efbfc2acdf1f51ba.bindPopup(popup_0f6d830160b169b9d66949e01a457593)
+        ;
+
+        
+    
+    
+                marker_1b6bdedff6625b93efbfc2acdf1f51ba.setIcon(icon_7420993f0e8beac572b943f930b6d3d9);
+            
+    
+            var marker_6c728c4f14a76c23b8b523d895c92402 = L.marker(
+                [39.91709, -76.60245],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_859b270d049daa68802c55b47152bc55 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_ecce37471db31acd7977283cb4b2a87d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d418ae7b2bae10b27281fb6c90b46b99 = $(`<div id="html_d418ae7b2bae10b27281fb6c90b46b99" style="width: 100.0%; height: 100.0%;"> <b>Community Yard Sale - Red Lion</b><br>Large Community Yard Sale - Red Lion! Royale Manor Estates Friday (5/23) & Saturday (5/24) 7 or more homes participating! Addresses: 400 Seville Drive - Antiques, Vintage items, Household goods, etc. 401 Seville Drive 202 Fleetwood Drive - Furniture, Exercise Equipment 219 Fleetwood Drive 220 Fleetwood Drive 505 El Dorado Drive - Grill, Barbies, Pound Puppies, Kids books, Extension Ladder 512 El Dorado Drive - Household items, Decor<br>400, Seville Drive, Freysville, Windsor Township, York County, Pennsylvania, 17356, United States<br><br>📅Fri, May 23, 2025 ⏲7:00 am - 3:00 pm<br>📅Sat, May 24, 2025 ⏲7:00 am - 3:00 pm<br><a href="https://gsalr.com/community-yard-sale-red-red-lion-pa-38311691.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(39.91709, -76.60245)">Get Directions</button> </div>`)[0];
+                popup_ecce37471db31acd7977283cb4b2a87d.setContent(html_d418ae7b2bae10b27281fb6c90b46b99);
+            
+        
+
+        marker_6c728c4f14a76c23b8b523d895c92402.bindPopup(popup_ecce37471db31acd7977283cb4b2a87d)
+        ;
+
+        
+    
+    
+                marker_6c728c4f14a76c23b8b523d895c92402.setIcon(icon_859b270d049daa68802c55b47152bc55);
+            
+    
+            var marker_c2204f34606be117ed530d6b107d1fd3 = L.marker(
+                [39.898355, -76.603994],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_8bed39b554345785b8ffaea0611ad5fe = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d94159651ecf53d7d420806f855319d5 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_51686ea96c70fc0ad6ea157641f4aade = $(`<div id="html_51686ea96c70fc0ad6ea157641f4aade" style="width: 100.0%; height: 100.0%;"> <b>Multiple Family Yard Sale</b><br>Rain or Shine  -Small black jewlery vanity -Small and medium female clothes -Dewalt tools -lamp -craft items -jewelry boxes -Iron board -size 6 women's crock sandles & clogs,  -photo frames with images - miscellaneous -bikes -Harley merchandise and apparel. -small children chairs -few mugs and plates -few kids toy -hutch glass doors -scent warmer<br>100, West Lancaster Street, Red Lion, York County, Pennsylvania, 17356, United States<br><br>📅Sat, May 24, 2025 ⏲8:00 am - 4:00 pm<br>📅Sun, May 25, 2025 ⏲8:00 am - 4:00 pm<br><a href="https://gsalr.com/multiple-family-yard-sale-red-lion-pa-38307817.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(39.898355, -76.603994)">Get Directions</button> </div>`)[0];
+                popup_d94159651ecf53d7d420806f855319d5.setContent(html_51686ea96c70fc0ad6ea157641f4aade);
+            
+        
+
+        marker_c2204f34606be117ed530d6b107d1fd3.bindPopup(popup_d94159651ecf53d7d420806f855319d5)
+        ;
+
+        
+    
+    
+                marker_c2204f34606be117ed530d6b107d1fd3.setIcon(icon_8bed39b554345785b8ffaea0611ad5fe);
+            
+    
+            var marker_b71433bc506d8bfe7004e7a62fca52a6 = L.marker(
+                [40.2638665, -76.9823906],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_1df18f8d160b3a7747717b3a2bdf9fdd = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_77f805b4b06712a16aef7640391a50ce = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6559aef9eb14d265d099a9624ea55298 = $(`<div id="html_6559aef9eb14d265d099a9624ea55298" style="width: 100.0%; height: 100.0%;"> <b>Garage Sale Mechanicsburg 5/24 - garage & moving sales - yard estate sale - craigslist</b><br>Garage Sale 7am-12pm Rain or Shine 503 Woodcrest Drive Mechanicsburg 17050 Golf items, Coca Cola collectables, household goods, purses, jewelry, sewing items, quilting books, Brooks mens sneakers...<br>503 Woodcrest Dr, Mechanicsburg, PA 17050, USA<br><br>saturday 2025-05-24<br>7:00 a.m.<br><a href="https://harrisburg.craigslist.org/gms/d/enola-garage-sale-mechanicsburg-24/7852235614.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.2638665, -76.9823906)">Get Directions</button> </div>`)[0];
+                popup_77f805b4b06712a16aef7640391a50ce.setContent(html_6559aef9eb14d265d099a9624ea55298);
+            
+        
+
+        marker_b71433bc506d8bfe7004e7a62fca52a6.bindPopup(popup_77f805b4b06712a16aef7640391a50ce)
+        ;
+
+        
+    
+    
+                marker_b71433bc506d8bfe7004e7a62fca52a6.setIcon(icon_1df18f8d160b3a7747717b3a2bdf9fdd);
+            
+    
+            var marker_222aecfe43cc8be27c20409646397a8f = L.marker(
+                [40.2157308, -76.9754649],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_7df576cfef07f3cde39ba80a09456786 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_df2d3b7f891a19babe603315de16f28a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_5c5083f14eda09ca227ca4e0610a657d = $(`<div id="html_5c5083f14eda09ca227ca4e0610a657d" style="width: 100.0%; height: 100.0%;"> <b>Yard Sale This Saturday - garage & moving sales - yard estate sale - craigslist</b><br>We are having a Yard Sale on Saturday, May 24, 2025, as well as at least one neighbor. 7am - 2pm 100 block of Winston Drive, Mechanicsburg Kids toys, household products, and more!<br>Winston Dr, Lower Allen Township, PA 17055, USA<br><br>saturday 2025-05-24<br>7:00am<br><a href="https://harrisburg.craigslist.org/gms/d/mechanicsburg-yard-sale-this-saturday/7852224385.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.2157308, -76.9754649)">Get Directions</button> </div>`)[0];
+                popup_df2d3b7f891a19babe603315de16f28a.setContent(html_5c5083f14eda09ca227ca4e0610a657d);
+            
+        
+
+        marker_222aecfe43cc8be27c20409646397a8f.bindPopup(popup_df2d3b7f891a19babe603315de16f28a)
+        ;
+
+        
+    
+    
+                marker_222aecfe43cc8be27c20409646397a8f.setIcon(icon_7df576cfef07f3cde39ba80a09456786);
+            
+    
+            var marker_1d6a553d23a2c7cf39df716775863655 = L.marker(
+                [40.22152579999999, -77.0152952],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_20bc2b80cd68566851df07428dcf0fbb = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_523221857893bd2685d951e7853966ab = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c769ca2df7d3eb2cb183b2528419eaf2 = $(`<div id="html_c769ca2df7d3eb2cb183b2528419eaf2" style="width: 100.0%; height: 100.0%;"> <b>Large Garage Sale - garage & moving sales - yard estate sale - craigslist</b><br>Friday, May 23rd, 8am - 5pm Saturday, May 24th, 8am - 1pm 20 York Circle, Mechanicsburg, Pa 17050 Rain or shine many health and beauty products (many new), make-up, Luminess air brush machine,...<br>20 York Cir, Mechanicsburg, PA 17050, USA<br><br>friday 2025-05-23<br>saturday 2025-05-24<br>8am<br><a href="https://harrisburg.craigslist.org/gms/d/mechanicsburg-large-garage-sale/7849029781.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.22152579999999, -77.0152952)">Get Directions</button> </div>`)[0];
+                popup_523221857893bd2685d951e7853966ab.setContent(html_c769ca2df7d3eb2cb183b2528419eaf2);
+            
+        
+
+        marker_1d6a553d23a2c7cf39df716775863655.bindPopup(popup_523221857893bd2685d951e7853966ab)
+        ;
+
+        
+    
+    
+                marker_1d6a553d23a2c7cf39df716775863655.setIcon(icon_20bc2b80cd68566851df07428dcf0fbb);
+            
+    
+            var marker_9d5a80870f742f9de3fbe14aea134167 = L.marker(
+                [40.1381168, -76.8675847],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_7e2f2bc8d62412232aa87dd69e473570 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_44981eb3a81b272b468ecacec23d5d56 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f89e35d75ec8d6650bc51033690cb887 = $(`<div id="html_f89e35d75ec8d6650bc51033690cb887" style="width: 100.0%; height: 100.0%;"> <b>Vintage Advertising and Antiques Indoor Yard Sale - garage & moving sales - yard estate sale - craigslist</b><br>I have hundreds of pieces of vintage American Advertising and Some Antiques To Sell. All very old and authentic. Not your usual yard sale. Rare Odd Old &amp; Unusual Describes It Best. Park in lower...<br>763 Siddonsburg Rd, Lewisberry, PA 17339, USA<br><br>friday 2025-05-23<br>saturday 2025-05-24<br>8:00AM<br><a href="https://harrisburg.craigslist.org/gms/d/lewisberry-vintage-advertising-and/7852058786.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.1381168, -76.8675847)">Get Directions</button> </div>`)[0];
+                popup_44981eb3a81b272b468ecacec23d5d56.setContent(html_f89e35d75ec8d6650bc51033690cb887);
+            
+        
+
+        marker_9d5a80870f742f9de3fbe14aea134167.bindPopup(popup_44981eb3a81b272b468ecacec23d5d56)
+        ;
+
+        
+    
+    
+                marker_9d5a80870f742f9de3fbe14aea134167.setIcon(icon_7e2f2bc8d62412232aa87dd69e473570);
+            
+    
+            var marker_dca11a3fe8ee4cc692e65edcf06a7583 = L.marker(
+                [40.3173363, -76.7785832],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_00f53ef85706028f0039f5f4ec54b953 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_4d4f5555ea3f0463ca5b8c9531ccf3b8 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_797f29e43582b7a7b5a3766e8e03ae77 = $(`<div id="html_797f29e43582b7a7b5a3766e8e03ae77" style="width: 100.0%; height: 100.0%;"> <b>Garage Sale / Downsizing - garage & moving sales - yard estate sale - craigslist</b><br>Downsizing to make room....Nothing is priced, any reasonable offer considered. Lots of items in great shape. Too much to list but some categories: Antiques / Toys Camping / Coolers / Tents Boating /...<br>6465 Heatherfield Way, Harrisburg, PA 17112, USA<br><br>saturday 2025-05-24<br>0800<br><a href="https://harrisburg.craigslist.org/gms/d/harrisburg-garage-sale-downsizing/7852044636.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.3173363, -76.7785832)">Get Directions</button> </div>`)[0];
+                popup_4d4f5555ea3f0463ca5b8c9531ccf3b8.setContent(html_797f29e43582b7a7b5a3766e8e03ae77);
+            
+        
+
+        marker_dca11a3fe8ee4cc692e65edcf06a7583.bindPopup(popup_4d4f5555ea3f0463ca5b8c9531ccf3b8)
+        ;
+
+        
+    
+    
+                marker_dca11a3fe8ee4cc692e65edcf06a7583.setIcon(icon_00f53ef85706028f0039f5f4ec54b953);
+            
+    
+            var marker_aeccd36f39da73586e26a2e38c881caa = L.marker(
+                [40.3737654, -76.9293006],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_3e2cf52759459d06326d230017c78517 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d883b19c291e47fc5eaa666d497576e2 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_7dd5bad658cf49ed2cf8784e505e037a = $(`<div id="html_7dd5bad658cf49ed2cf8784e505e037a" style="width: 100.0%; height: 100.0%;"> <b>Family Yard Sale - garage & moving sales - yard estate sale - craigslist</b><br>Come see us at 708 Edison Rd. We have new to slightly used mix of everything. 7-?<br>708, Edison Road, Dauphin, Dauphin County, Pennsylvania, 17018, United States<br><br>saturday 2025-05-24<br>7<br><a href="https://harrisburg.craigslist.org/gms/d/dauphin-family-yard-sale/7852028508.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.3737654, -76.9293006)">Get Directions</button> </div>`)[0];
+                popup_d883b19c291e47fc5eaa666d497576e2.setContent(html_7dd5bad658cf49ed2cf8784e505e037a);
+            
+        
+
+        marker_aeccd36f39da73586e26a2e38c881caa.bindPopup(popup_d883b19c291e47fc5eaa666d497576e2)
+        ;
+
+        
+    
+    
+                marker_aeccd36f39da73586e26a2e38c881caa.setIcon(icon_3e2cf52759459d06326d230017c78517);
+            
+    
+            var marker_e1d2b63c86a1552373710ebdd9fd2683 = L.marker(
+                [40.29567730000001, -76.8194784],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_9abb03504912f5b15ed72ed689fd82af = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_b119e3283cc6e8407e216b92baf34223 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_90349a4d6f404d5fa0924dcb621d4df8 = $(`<div id="html_90349a4d6f404d5fa0924dcb621d4df8" style="width: 100.0%; height: 100.0%;"> <b>Downsizing Estate sale - garage & moving sales - yard estate sale - craigslist</b><br>Down sizing my things and things from Errnie Kepner estate. Furniture, Mirrors, Paintings, sign Bronze statue, lots of decorative accessories, garden rod iron accessories, lamps ,Glassware, Steuben,...<br>4401 Lexington St, Harrisburg, PA 17109, USA<br><br>saturday 2025-05-24<br>3 pm<br><a href="https://harrisburg.craigslist.org/gms/d/harrisburg-downsizing-estate-sale/7851700628.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.29567730000001, -76.8194784)">Get Directions</button> </div>`)[0];
+                popup_b119e3283cc6e8407e216b92baf34223.setContent(html_90349a4d6f404d5fa0924dcb621d4df8);
+            
+        
+
+        marker_e1d2b63c86a1552373710ebdd9fd2683.bindPopup(popup_b119e3283cc6e8407e216b92baf34223)
+        ;
+
+        
+    
+    
+                marker_e1d2b63c86a1552373710ebdd9fd2683.setIcon(icon_9abb03504912f5b15ed72ed689fd82af);
+            
+    
+            var marker_2c5335be1394435e67349be340891c83 = L.marker(
+                [40.3324671, -76.7553807],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_05c9340717c1104835720e3dd45b559d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_b2020bac44d8a7c5376007e70a2889a8 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_7a35367b02b7df6c1df93f13b853ad90 = $(`<div id="html_7a35367b02b7df6c1df93f13b853ad90" style="width: 100.0%; height: 100.0%;"> <b>Yard and Plant Sale !!! - garage & moving sales - yard estate sale - craigslist</b><br>May 22nd 23rd 24th from 8-1pm at 7050 Blue Ridge Ave. Hbg. Perennials sun to shade plants that come back every year, asst. trees and bushes, sedums, hosta, Lenton rose, succulents, ground covers,...<br>7050 Blue Ridge Ave, Harrisburg, PA 17112, USA<br><br>thursday 2025-05-22<br>friday 2025-05-23<br>saturday 2025-05-24<br>8am -1pm<br><a href="https://harrisburg.craigslist.org/gms/d/harrisburg-yard-and-plant-sale/7849813823.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.3324671, -76.7553807)">Get Directions</button> </div>`)[0];
+                popup_b2020bac44d8a7c5376007e70a2889a8.setContent(html_7a35367b02b7df6c1df93f13b853ad90);
+            
+        
+
+        marker_2c5335be1394435e67349be340891c83.bindPopup(popup_b2020bac44d8a7c5376007e70a2889a8)
+        ;
+
+        
+    
+    
+                marker_2c5335be1394435e67349be340891c83.setIcon(icon_05c9340717c1104835720e3dd45b559d);
+            
+    
+            var marker_b29322bcf0da1b9a506a68a8c28923bb = L.marker(
+                [40.2627576, -76.7399371],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_3a182f420a028b317c518367161853ca = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_11d73b3216dbbc72fc118962d5f8b2a1 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_b7b9b8961465b2b7aa35823e56069fb2 = $(`<div id="html_b7b9b8961465b2b7aa35823e56069fb2" style="width: 100.0%; height: 100.0%;"> <b>Neighborhood Yard Sale - Summitview Plan (off 322 Swatara Twp.) - garage & moving sales - yard estate sale - craigslist</b><br>Neighborhood Yard Sale ***Rain or Shine*** 7a to 1p Saturday May 24th Summit View Plan – Swatara Twp. Near Hummelston off Rt. 322 (Presidents Dr, McKinley Ct, Washington Circle, Haslyn are some...<br>Presidents Dr, Hummelstown, PA 17036, USA<br><br>saturday 2025-05-24<br>7a<br><a href="https://york.craigslist.org/gms/d/hummelstown-neighborhood-yard-sale/7849455088.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.2627576, -76.7399371)">Get Directions</button> </div>`)[0];
+                popup_11d73b3216dbbc72fc118962d5f8b2a1.setContent(html_b7b9b8961465b2b7aa35823e56069fb2);
+            
+        
+
+        marker_b29322bcf0da1b9a506a68a8c28923bb.bindPopup(popup_11d73b3216dbbc72fc118962d5f8b2a1)
+        ;
+
+        
+    
+    
+                marker_b29322bcf0da1b9a506a68a8c28923bb.setIcon(icon_3a182f420a028b317c518367161853ca);
+            
+    
+            var marker_52d7576059aaa924466ceac50482f914 = L.marker(
+                [40.2627576, -76.7399371],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_2387dc4c0d3804cbb23c8b875149ffd3 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c9000dbbd486887a0173be8ce772a955 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_27ad867e50e5eb6d8774e5575ecd5174 = $(`<div id="html_27ad867e50e5eb6d8774e5575ecd5174" style="width: 100.0%; height: 100.0%;"> <b>Neighborhood Yard Sale - Summitview Plan(off 322 Swatara Twp.) - garage & moving sales - yard estate sale - craigslist</b><br>Neighborhood Yard Sale ***Rain or Shine*** 7a to 1p Saturday May 24th Summit View Plan – Swatara Twp. Near Hummelston off Rt. 322 (Presidents Dr, McKinley Ct, Washington Circle, Haslyn are some...<br>Presidents Dr, Hummelstown, PA 17036, USA<br><br>saturday 2025-05-24<br>7am<br><a href="https://harrisburg.craigslist.org/gms/d/harrisburg-neighborhood-yard-sale/7849452557.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.2627576, -76.7399371)">Get Directions</button> </div>`)[0];
+                popup_c9000dbbd486887a0173be8ce772a955.setContent(html_27ad867e50e5eb6d8774e5575ecd5174);
+            
+        
+
+        marker_52d7576059aaa924466ceac50482f914.bindPopup(popup_c9000dbbd486887a0173be8ce772a955)
+        ;
+
+        
+    
+    
+                marker_52d7576059aaa924466ceac50482f914.setIcon(icon_2387dc4c0d3804cbb23c8b875149ffd3);
+            
+    
+            var marker_1249818607c5d9b7dbc48aed12e19684 = L.marker(
+                [40.2942442, -76.8255447],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_aeb932af2e3ce480501d82d347c72e2d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_af500f2408d762d27f16a793e089c789 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_033b01a411420612566f568a8a227add = $(`<div id="html_033b01a411420612566f568a8a227add" style="width: 100.0%; height: 100.0%;"> <b>Neighborhood Yard Sale-Old Colonial Park - garage & moving sales - yard estate sale - craigslist</b><br>Our neighborhood is having our annual yard sale on Saturday, May 24th from 8:00 AM to 12:00 PM. The streets participating are Lexington, Madison, Concord, Willow and Franklin from Revere to 48th...<br>65 S Madison St, Harrisburg, PA 17109, USA<br><br>thursday 2025-05-22<br>friday 2025-05-23<br>saturday 2025-05-24<br>8:00 AM<br><a href="https://harrisburg.craigslist.org/gms/d/harrisburg-neighborhood-yard-sale-old/7851488040.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.2942442, -76.8255447)">Get Directions</button> </div>`)[0];
+                popup_af500f2408d762d27f16a793e089c789.setContent(html_033b01a411420612566f568a8a227add);
+            
+        
+
+        marker_1249818607c5d9b7dbc48aed12e19684.bindPopup(popup_af500f2408d762d27f16a793e089c789)
+        ;
+
+        
+    
+    
+                marker_1249818607c5d9b7dbc48aed12e19684.setIcon(icon_aeb932af2e3ce480501d82d347c72e2d);
+            
+    
+            var marker_6b8797b45cc714f38fdbdd4cf81aa676 = L.marker(
+                [40.2658215, -76.7150046],
+                {
+}
+            ).addTo(map_811ffbfbda88b6e101e7b53a306deba3);
+        
+    
+            var icon_336be8da010179a4450b85518e8861e0 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkblue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_06965ffe4061b20b5f2243d6c206715a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a9e871639ad111ae7d0267de573631b8 = $(`<div id="html_a9e871639ad111ae7d0267de573631b8" style="width: 100.0%; height: 100.0%;"> <b>Vintage YARD SALE. Tons of stuff. - garage & moving sales - yard estate sale - craigslist</b><br>25 N Landis Hummelstown Resellers welcome. Something for everyone<br>25 N Landis St #2nd, Hummelstown, PA 17036, USA<br><br>friday 2025-05-23<br>saturday 2025-05-24<br>8am<br><a href="https://harrisburg.craigslist.org/gms/d/hummelstown-vintage-yard-sale-tons-of/7850825577.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><br> <button onclick="routeTo(40.2658215, -76.7150046)">Get Directions</button> </div>`)[0];
+                popup_06965ffe4061b20b5f2243d6c206715a.setContent(html_a9e871639ad111ae7d0267de573631b8);
+            
+        
+
+        marker_6b8797b45cc714f38fdbdd4cf81aa676.bindPopup(popup_06965ffe4061b20b5f2243d6c206715a)
+        ;
+
+        
+    
+    
+                marker_6b8797b45cc714f38fdbdd4cf81aa676.setIcon(icon_336be8da010179a4450b85518e8861e0);
+            
+</script>
+</html>
