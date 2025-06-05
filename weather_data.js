@@ -1,2 +1,2 @@
-const weatherSummary = `Moderate rain early turning to heavy drizzle as the morning progresses., Temp will hit 57.6 by noon.`;
-const weatherWarning = `Heavy rain`;
+const weatherSummary = `Mostly overcast throughout the morning., Temp will hit 70.7 by noon.`;
+const weatherWarning = ``;
