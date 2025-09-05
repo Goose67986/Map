@@ -1,2 +1,2 @@
-const weatherSummary = `Mostly clear sky throughout the morning., Temp will hit 65.3 by noon.`;
+const weatherSummary = `Clear sky early turning to overcast as the morning progresses., Temp will hit 68.0 by noon.`;
 const weatherWarning = ``;
