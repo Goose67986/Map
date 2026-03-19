@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_a87699eb34a20dff27009b0a894ea714 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_a87699eb34a20dff27009b0a894ea714" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_a87699eb34a20dff27009b0a894ea714 = L.map(
+                "map_a87699eb34a20dff27009b0a894ea714",
+                {
+                    center: [40.2377, -76.9596],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 10,
+  "zoomControl": true,
+  "preferCanvas": false,
+  "control": false,
+}
+
+                }
+            );
+            L.control.scale().addTo(map_a87699eb34a20dff27009b0a894ea714);
+
+            
+
+        
+    
+            var tile_layer_418199b4ce48b8ef628ba2378419d618 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_418199b4ce48b8ef628ba2378419d618.addTo(map_a87699eb34a20dff27009b0a894ea714);
+        
+    
+            var tile_layer_706e29456e974025ab3ca63f2e710985 = L.tileLayer(
+                "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                {
+  "minZoom": 0,
+  "maxZoom": 18,
+  "maxNativeZoom": 18,
+  "noWrap": false,
+  "attribution": "Esri",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_706e29456e974025ab3ca63f2e710985.addTo(map_a87699eb34a20dff27009b0a894ea714);
+        
+    
+            var marker_9f83303501d39370de672f4b11aa72aa = L.marker(
+                [40.2377, -76.9596],
+                {
+}
+            ).addTo(map_a87699eb34a20dff27009b0a894ea714);
+        
+    
+            var icon_39ce1580794bf36edbfda97943bfb3ac = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "home",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_bdf1387bbd8d2fda031b455a909d3e43 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_e7db7344b9a63eb074db75677ebedb29 = $(`<div id="html_e7db7344b9a63eb074db75677ebedb29" style="width: 100.0%; height: 100.0%;">Home Base: Camp Hill</div>`)[0];
+                popup_bdf1387bbd8d2fda031b455a909d3e43.setContent(html_e7db7344b9a63eb074db75677ebedb29);
+            
+        
+
+        marker_9f83303501d39370de672f4b11aa72aa.bindPopup(popup_bdf1387bbd8d2fda031b455a909d3e43)
+        ;
+
+        
+    
+    
+            marker_9f83303501d39370de672f4b11aa72aa.bindTooltip(
+                `<div>
+                     Home Base: Camp Hill
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_9f83303501d39370de672f4b11aa72aa.setIcon(icon_39ce1580794bf36edbfda97943bfb3ac);
+            
+    
+            var tile_layer_67e6cc55d31fc1a7ae333cebfcaf4643 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 18,
+  "maxNativeZoom": 18,
+  "noWrap": false,
+  "attribution": "Carto",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_67e6cc55d31fc1a7ae333cebfcaf4643.addTo(map_a87699eb34a20dff27009b0a894ea714);
+        
+    
+            var tile_layer_76e5aa930c76fb328d9e53afb4f80d70 = L.tileLayer(
+                "https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+                {
+  "minZoom": 0,
+  "maxZoom": 18,
+  "maxNativeZoom": 18,
+  "noWrap": false,
+  "attribution": "Esri",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_76e5aa930c76fb328d9e53afb4f80d70.addTo(map_a87699eb34a20dff27009b0a894ea714);
+        
+    
+            var layer_control_21d7a15c52d90d3a4e94ea1ddcaa6fdf_layers = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_418199b4ce48b8ef628ba2378419d618,
+                    "Satellite" : tile_layer_706e29456e974025ab3ca63f2e710985,
+                    "CartoDB Dark Matter" : tile_layer_67e6cc55d31fc1a7ae333cebfcaf4643,
+                    "Esri Street Map" : tile_layer_76e5aa930c76fb328d9e53afb4f80d70,
+                },
+                overlays :  {
+                },
+            };
+            let layer_control_21d7a15c52d90d3a4e94ea1ddcaa6fdf = L.control.layers(
+                layer_control_21d7a15c52d90d3a4e94ea1ddcaa6fdf_layers.base_layers,
+                layer_control_21d7a15c52d90d3a4e94ea1ddcaa6fdf_layers.overlays,
+                {
+  "position": "bottomleft",
+  "collapsed": true,
+  "autoZIndex": true,
+}
+            ).addTo(map_a87699eb34a20dff27009b0a894ea714);
+
+        
+    
+            var poly_line_2b369340a6a9e4b5462a704aedfe0bba = L.polyline(
+                [[40.29919, -76.81462], [40.30011, -76.81515], [40.30061, -76.81553], [40.30091, -76.81574], [40.30099, -76.81581], [40.29957, -76.81931], [40.29894, -76.82096], [40.29869, -76.82157], [40.29823, -76.82276], [40.29797, -76.82342], [40.29768, -76.824], [40.29727, -76.82465], [40.29697, -76.82505], [40.2968, -76.82525], [40.29508, -76.82744], [40.29438, -76.8284], [40.29186, -76.83204], [40.2909, -76.8334], [40.28877, -76.83646], [40.28803, -76.83757], [40.28789, -76.83763], [40.28718, -76.83854], [40.2858, -76.84032], [40.28468, -76.84174], [40.28386, -76.84064], [40.28337, -76.84008], [40.28279, -76.83953], [40.28259, -76.83936], [40.28201, -76.83894], [40.27891, -76.83691], [40.27744, -76.8359], [40.27701, -76.83692], [40.27641, -76.83641], [40.27628, -76.83622], [40.27607, -76.83582], [40.2758, -76.83549], [40.27568, -76.83538], [40.27491, -76.83494], [40.27505, -76.83441], [40.26968, -76.83163], [40.26906, -76.83135], [40.26841, -76.83115], [40.26763, -76.83101], [40.26697, -76.83097], [40.26635, -76.83099], [40.26156, -76.83161], [40.259, -76.8319], [40.2587, -76.82747], [40.25835, -76.82464], [40.25795, -76.82082], [40.25753, -76.8168], [40.25752, -76.81646], [40.25766, -76.81452], [40.25787, -76.81454], [40.25817, -76.81463], [40.25852, -76.81476], [40.25864, -76.81473], [40.25873, -76.81462], [40.25876, -76.81448], [40.25875, -76.81435], [40.25867, -76.81422], [40.25852, -76.81415], [40.25832, -76.81411], [40.25823, -76.81407], [40.25667, -76.81395], [40.25577, -76.81392], [40.25436, -76.81396], [40.25272, -76.81396], [40.25248, -76.81407], [40.25237, -76.81419], [40.25229, -76.81438], [40.25228, -76.8146], [40.25232, -76.8148], [40.25241, -76.81495], [40.25254, -76.81506], [40.2527, -76.8151], [40.25285, -76.81506], [40.25298, -76.81496], [40.25307, -76.81479], [40.25311, -76.81464], [40.2531, -76.81438], [40.25284, -76.8123], [40.2529, -76.81214], [40.25281, -76.81137], [40.2527, -76.81007], [40.25268, -76.80921], [40.25279, -76.80784], [40.2528, -76.80741], [40.25306, -76.80374], [40.25313, -76.803], [40.25329, -76.80189], [40.25346, -76.80106], [40.25373, -76.79998], [40.25401, -76.79907], [40.25477, -76.79696], [40.25505, -76.79633], [40.25632, -76.79375], [40.25652, -76.79324], [40.2568, -76.79216], [40.25711, -76.7906], [40.25756, -76.78779], [40.25904, -76.77801], [40.25957, -76.77462], [40.25985, -76.77278], [40.26125, -76.76221], [40.26148, -76.7609], [40.26173, -76.75953], [40.26191, -76.7582], [40.26201, -76.75668], [40.26201, -76.75541], [40.26178, -76.74705], [40.26171, -76.74587], [40.26157, -76.7441], [40.26151, -76.74369], [40.26119, -76.74065], [40.26098, -76.73879], [40.26088, -76.73731], [40.26087, -76.73603], [40.26089, -76.73301], [40.26088, -76.73058], [40.26094, -76.72638], [40.26092, -76.72497], [40.26086, -76.72405], [40.26075, -76.72328], [40.26049, -76.72185], [40.25837, -76.71127], [40.25819, -76.71015], [40.25805, -76.70888], [40.25796, -76.7075], [40.25794, -76.70634], [40.25796, -76.7054], [40.25804, -76.70423], [40.25816, -76.70306], [40.25833, -76.70189], [40.25861, -76.70054], [40.25885, -76.69958], [40.25905, -76.69886], [40.25947, -76.69763], [40.25965, -76.69714], [40.26007, -76.69616], [40.26009, -76.69608], [40.26063, -76.69496], [40.26125, -76.69384], [40.2617, -76.69312], [40.26278, -76.69154], [40.26395, -76.68993], [40.26623, -76.6867], [40.26673, -76.68598], [40.26747, -76.68495], [40.26924, -76.68239], [40.27012, -76.681], [40.27082, -76.67965], [40.27114, -76.67899], [40.27157, -76.67797], [40.27218, -76.6763], [40.2745, -76.66974], [40.27482, -76.66893], [40.27519, -76.66815], [40.27563, -76.66735], [40.2761, -76.66665], [40.27658, -76.66603], [40.27719, -76.66535], [40.27785, -76.66472], [40.27828, -76.66435], [40.27704, -76.66226], [40.27571, -76.66016], [40.27642, -76.65968], [40.27872, -76.6535]],
+                {"bubblingMouseEvents": true, "color": "#000000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#000000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 8}
+            ).addTo(map_a87699eb34a20dff27009b0a894ea714);
+        
+    
+            var poly_line_21d40a58c5ca135a34581c3cf2d2afb5 = L.polyline(
+                [[40.29919, -76.81462], [40.30011, -76.81515], [40.30061, -76.81553], [40.30091, -76.81574], [40.30099, -76.81581], [40.29957, -76.81931], [40.29894, -76.82096], [40.29869, -76.82157], [40.29823, -76.82276], [40.29797, -76.82342], [40.29768, -76.824], [40.29727, -76.82465], [40.29697, -76.82505], [40.2968, -76.82525], [40.29508, -76.82744], [40.29438, -76.8284], [40.29186, -76.83204], [40.2909, -76.8334], [40.28877, -76.83646], [40.28803, -76.83757], [40.28789, -76.83763], [40.28718, -76.83854], [40.2858, -76.84032], [40.28468, -76.84174], [40.28386, -76.84064], [40.28337, -76.84008], [40.28279, -76.83953], [40.28259, -76.83936], [40.28201, -76.83894], [40.27891, -76.83691], [40.27744, -76.8359], [40.27701, -76.83692], [40.27641, -76.83641], [40.27628, -76.83622], [40.27607, -76.83582], [40.2758, -76.83549], [40.27568, -76.83538], [40.27491, -76.83494], [40.27505, -76.83441], [40.26968, -76.83163], [40.26906, -76.83135], [40.26841, -76.83115], [40.26763, -76.83101], [40.26697, -76.83097], [40.26635, -76.83099], [40.26156, -76.83161], [40.259, -76.8319], [40.2587, -76.82747], [40.25835, -76.82464], [40.25795, -76.82082], [40.25753, -76.8168], [40.25752, -76.81646], [40.25766, -76.81452], [40.25787, -76.81454], [40.25817, -76.81463], [40.25852, -76.81476], [40.25864, -76.81473], [40.25873, -76.81462], [40.25876, -76.81448], [40.25875, -76.81435], [40.25867, -76.81422], [40.25852, -76.81415], [40.25832, -76.81411], [40.25823, -76.81407], [40.25667, -76.81395], [40.25577, -76.81392], [40.25436, -76.81396], [40.25272, -76.81396], [40.25248, -76.81407], [40.25237, -76.81419], [40.25229, -76.81438], [40.25228, -76.8146], [40.25232, -76.8148], [40.25241, -76.81495], [40.25254, -76.81506], [40.2527, -76.8151], [40.25285, -76.81506], [40.25298, -76.81496], [40.25307, -76.81479], [40.25311, -76.81464], [40.2531, -76.81438], [40.25284, -76.8123], [40.2529, -76.81214], [40.25281, -76.81137], [40.2527, -76.81007], [40.25268, -76.80921], [40.25279, -76.80784], [40.2528, -76.80741], [40.25306, -76.80374], [40.25313, -76.803], [40.25329, -76.80189], [40.25346, -76.80106], [40.25373, -76.79998], [40.25401, -76.79907], [40.25477, -76.79696], [40.25505, -76.79633], [40.25632, -76.79375], [40.25652, -76.79324], [40.2568, -76.79216], [40.25711, -76.7906], [40.25756, -76.78779], [40.25904, -76.77801], [40.25957, -76.77462], [40.25985, -76.77278], [40.26125, -76.76221], [40.26148, -76.7609], [40.26173, -76.75953], [40.26191, -76.7582], [40.26201, -76.75668], [40.26201, -76.75541], [40.26178, -76.74705], [40.26171, -76.74587], [40.26157, -76.7441], [40.26151, -76.74369], [40.26119, -76.74065], [40.26098, -76.73879], [40.26088, -76.73731], [40.26087, -76.73603], [40.26089, -76.73301], [40.26088, -76.73058], [40.26094, -76.72638], [40.26092, -76.72497], [40.26086, -76.72405], [40.26075, -76.72328], [40.26049, -76.72185], [40.25837, -76.71127], [40.25819, -76.71015], [40.25805, -76.70888], [40.25796, -76.7075], [40.25794, -76.70634], [40.25796, -76.7054], [40.25804, -76.70423], [40.25816, -76.70306], [40.25833, -76.70189], [40.25861, -76.70054], [40.25885, -76.69958], [40.25905, -76.69886], [40.25947, -76.69763], [40.25965, -76.69714], [40.26007, -76.69616], [40.26009, -76.69608], [40.26063, -76.69496], [40.26125, -76.69384], [40.2617, -76.69312], [40.26278, -76.69154], [40.26395, -76.68993], [40.26623, -76.6867], [40.26673, -76.68598], [40.26747, -76.68495], [40.26924, -76.68239], [40.27012, -76.681], [40.27082, -76.67965], [40.27114, -76.67899], [40.27157, -76.67797], [40.27218, -76.6763], [40.2745, -76.66974], [40.27482, -76.66893], [40.27519, -76.66815], [40.27563, -76.66735], [40.2761, -76.66665], [40.27658, -76.66603], [40.27719, -76.66535], [40.27785, -76.66472], [40.27828, -76.66435], [40.27704, -76.66226], [40.27571, -76.66016], [40.27642, -76.65968], [40.27872, -76.6535]],
+                {"bubblingMouseEvents": true, "color": "#0057FF", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#0057FF", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_a87699eb34a20dff27009b0a894ea714);
+        
+    
+            poly_line_21d40a58c5ca135a34581c3cf2d2afb5.bindTooltip(
+                `<div>
+                     Planned Route
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_f472726426bd8a8975d3be2e3c178cd1 = L.marker(
+                [40.2991946, -76.8146159],
+                {
+}
+            ).addTo(map_a87699eb34a20dff27009b0a894ea714);
+        
+    
+            var div_icon_9e7faef448c7fa8b9551d7b5828fdace = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    font-size: 12pt;\n                    color: white;\n                    background: #d62828;\n                    border: 2px solid white;\n                    border-radius: 50%;\n                    text-align: center;\n                    width: 28px;\n                    height: 28px;\n                    line-height: 24px;\n                    font-weight: bold;\n                    box-shadow: 0 0 4px rgba(0,0,0,0.5);\n                \"\u003e\n                    1\n                \u003c/div\u003e\n                ",
+  "iconSize": [36, 36],
+  "iconAnchor": [18, 18],
+  "className": "empty",
+});
+        
+    
+        var popup_1a5861cdca99b99d58c184bce3b4701f = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_49b1860b32a905702dbacb77b54c320b = $(`<div id="html_49b1860b32a905702dbacb77b54c320b" style="width: 100.0%; height: 100.0%;">          <div style="width: 280px; height: 220px; overflow-y: auto; font-size: 14px;">         <b>Stop #1 - Even more estate sale items various furniture and household items - garage & moving sales - yard estate sale -...</b><br><br>          <b>Cluster:</b> 1<br>         <b>Score:</b> 50<br>         <b>Start:</b> 7:00 AM<br>         <b>Date:</b> saturday 2026-03-21<br>wednesday 2026-03-25<br>saturday 2026-03-28<br>7am<br>         <b>Address:</b> Miller Rd, Colonial Park, PA 17109, USA<br>         <b>Home Drive:</b> 17 min<br>          <b>Description:</b><br>         Serious inquires only please. Pickup in Harrisburg near the colonial park mall. Pickup is available most days after 4pm and most any time on the weekends. Student desk - $50 Vintage student desk....<br><br>          <b>Details:</b><br>         None<br><br>          <b>Breakdown</b><br>         Distance: 8<br>         Time: 25<br>         Type: 10<br>         Keywords: 7<br><br>          <b>Cluster Info</b><br>         Cluster Value: 123<br>         Distance From Current Start: 12.6 miles<br>         Drive Time: 17 min<br>         Arrival: 7:00 AM<br>         Wait: 0 min<br>         Begin Shopping: 7:00 AM<br>         Estimated Cluster Finish: 7:16 AM<br><br>          <a href="https://www.google.com/maps/search/?api=1&query=Miller+Rd%2C+Colonial+Park%2C+PA+17109%2C+USA" target="_blank">Open in Google Maps</a>     </div>     </div>`)[0];
+                popup_1a5861cdca99b99d58c184bce3b4701f.setContent(html_49b1860b32a905702dbacb77b54c320b);
+            
+        
+
+        marker_f472726426bd8a8975d3be2e3c178cd1.bindPopup(popup_1a5861cdca99b99d58c184bce3b4701f)
+        ;
+
+        
+    
+    
+            marker_f472726426bd8a8975d3be2e3c178cd1.bindTooltip(
+                `<div>
+                     1. Even more estate sale items various furniture and household items - garage & moving sales - yard estate sale -...
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f472726426bd8a8975d3be2e3c178cd1.setIcon(div_icon_9e7faef448c7fa8b9551d7b5828fdace);
+            
+    
+            var marker_77cef3a208e3d0b26566aa0b43bf83e5 = L.marker(
+                [40.2991946, -76.8146159],
+                {
+}
+            ).addTo(map_a87699eb34a20dff27009b0a894ea714);
+        
+    
+            var div_icon_d43e6dba78a6cfb0f3963b5e055aa158 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    font-size: 12pt;\n                    color: white;\n                    background: #d62828;\n                    border: 2px solid white;\n                    border-radius: 50%;\n                    text-align: center;\n                    width: 28px;\n                    height: 28px;\n                    line-height: 24px;\n                    font-weight: bold;\n                    box-shadow: 0 0 4px rgba(0,0,0,0.5);\n                \"\u003e\n                    2\n                \u003c/div\u003e\n                ",
+  "iconSize": [36, 36],
+  "iconAnchor": [18, 18],
+  "className": "empty",
+});
+        
+    
+        var popup_f727dd947da289efe717bdbc4e42b0c4 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_23e1a4d7383d1449d6b5e365e1f17746 = $(`<div id="html_23e1a4d7383d1449d6b5e365e1f17746" style="width: 100.0%; height: 100.0%;">          <div style="width: 280px; height: 220px; overflow-y: auto; font-size: 14px;">         <b>Stop #2 - More estate sale items various furniture and household items - garage & moving sales - yard estate sale - craigslist</b><br><br>          <b>Cluster:</b> 1<br>         <b>Score:</b> 50<br>         <b>Start:</b> 7:00 AM<br>         <b>Date:</b> wednesday 2026-03-18<br>saturday 2026-03-21<br>saturday 2026-03-28<br>7am<br>         <b>Address:</b> Miller Rd, Colonial Park, PA 17109, USA<br>         <b>Home Drive:</b> 17 min<br>          <b>Description:</b><br>         Serious inquires only please. Pickup in Harrisburg near the colonial park mall. Pickup is available most days after 4pm and most any time on the weekends. Keg Fridge - Vintage Admiral (1950’s) $150...<br><br>          <b>Details:</b><br>         None<br><br>          <b>Breakdown</b><br>         Distance: 8<br>         Time: 25<br>         Type: 10<br>         Keywords: 7<br><br>          <b>Cluster Info</b><br>         Cluster Value: 123<br>         Distance From Current Start: 12.6 miles<br>         Drive Time: 17 min<br>         Arrival: 7:00 AM<br>         Wait: 0 min<br>         Begin Shopping: 7:00 AM<br>         Estimated Cluster Finish: 7:16 AM<br><br>          <a href="https://www.google.com/maps/search/?api=1&query=Miller+Rd%2C+Colonial+Park%2C+PA+17109%2C+USA" target="_blank">Open in Google Maps</a>     </div>     </div>`)[0];
+                popup_f727dd947da289efe717bdbc4e42b0c4.setContent(html_23e1a4d7383d1449d6b5e365e1f17746);
+            
+        
+
+        marker_77cef3a208e3d0b26566aa0b43bf83e5.bindPopup(popup_f727dd947da289efe717bdbc4e42b0c4)
+        ;
+
+        
+    
+    
+            marker_77cef3a208e3d0b26566aa0b43bf83e5.bindTooltip(
+                `<div>
+                     2. More estate sale items various furniture and household items - garage & moving sales - yard estate sale - craigslist
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_77cef3a208e3d0b26566aa0b43bf83e5.setIcon(div_icon_d43e6dba78a6cfb0f3963b5e055aa158);
+            
+    
+            var marker_6274317f21d1a3ce070b7ac135098d1b = L.marker(
+                [40.2760675, -76.8358185],
+                {
+}
+            ).addTo(map_a87699eb34a20dff27009b0a894ea714);
+        
+    
+            var div_icon_1ca1637e454e0a54b4702f2bfa08085c = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    font-size: 12pt;\n                    color: white;\n                    background: #d62828;\n                    border: 2px solid white;\n                    border-radius: 50%;\n                    text-align: center;\n                    width: 28px;\n                    height: 28px;\n                    line-height: 24px;\n                    font-weight: bold;\n                    box-shadow: 0 0 4px rgba(0,0,0,0.5);\n                \"\u003e\n                    3\n                \u003c/div\u003e\n                ",
+  "iconSize": [36, 36],
+  "iconAnchor": [18, 18],
+  "className": "empty",
+});
+        
+    
+        var popup_8ae554896fee435b4f490078c779b0e2 = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_25bebb5fa8cb3d90ef32f9d313ebd3ac = $(`<div id="html_25bebb5fa8cb3d90ef32f9d313ebd3ac" style="width: 100.0%; height: 100.0%;">          <div style="width: 280px; height: 220px; overflow-y: auto; font-size: 14px;">         <b>Stop #3 - Yard sale Friday till 2:00 Sat till 2:00 - garage & moving sales - yard estate sale - craigslist</b><br><br>          <b>Cluster:</b> 2<br>         <b>Score:</b> 46<br>         <b>Start:</b> 8:00 AM<br>         <b>Date:</b> friday 2026-03-20<br>saturday 2026-03-21<br>8:00<br>         <b>Address:</b> Altavista Ave, Lower Paxton Township, PA 17109, USA<br>         <b>Home Drive:</b> 15 min<br>          <b>Description:</b><br>         28 inch Samsung tv. Cedar chest. Plants. Large flower pots. Stainless steal scissors. Large trash cans. 5 florcent light tubes. Garden hose. Keureg Coffee carousel. Lots of kitchen utensils. Bed...<br><br>          <b>Details:</b><br>         None<br><br>          <b>Breakdown</b><br>         Distance: 14<br>         Time: 22<br>         Type: 10<br>         Keywords: 0<br><br>          <b>Cluster Info</b><br>         Cluster Value: 65<br>         Distance From Current Start: 2.7 miles<br>         Drive Time: 9 min<br>         Arrival: 7:25 AM<br>         Wait: 35 min<br>         Begin Shopping: 8:00 AM<br>         Estimated Cluster Finish: 8:09 AM<br><br>          <a href="https://www.google.com/maps/search/?api=1&query=Altavista+Ave%2C+Lower+Paxton+Township%2C+PA+17109%2C+USA" target="_blank">Open in Google Maps</a>     </div>     </div>`)[0];
+                popup_8ae554896fee435b4f490078c779b0e2.setContent(html_25bebb5fa8cb3d90ef32f9d313ebd3ac);
+            
+        
+
+        marker_6274317f21d1a3ce070b7ac135098d1b.bindPopup(popup_8ae554896fee435b4f490078c779b0e2)
+        ;
+
+        
+    
+    
+            marker_6274317f21d1a3ce070b7ac135098d1b.bindTooltip(
+                `<div>
+                     3. Yard sale Friday till 2:00 Sat till 2:00 - garage & moving sales - yard estate sale - craigslist
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_6274317f21d1a3ce070b7ac135098d1b.setIcon(div_icon_1ca1637e454e0a54b4702f2bfa08085c);
+            
+    
+            var marker_e22f36fabe2cb5904082a66cc8f9873a = L.marker(
+                [40.2786581, -76.6534566],
+                {
+}
+            ).addTo(map_a87699eb34a20dff27009b0a894ea714);
+        
+    
+            var div_icon_b6cdd8c77692878cc7b1cbe2ddaecec0 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    font-size: 12pt;\n                    color: white;\n                    background: #d62828;\n                    border: 2px solid white;\n                    border-radius: 50%;\n                    text-align: center;\n                    width: 28px;\n                    height: 28px;\n                    line-height: 24px;\n                    font-weight: bold;\n                    box-shadow: 0 0 4px rgba(0,0,0,0.5);\n                \"\u003e\n                    4\n                \u003c/div\u003e\n                ",
+  "iconSize": [36, 36],
+  "iconAnchor": [18, 18],
+  "className": "empty",
+});
+        
+    
+        var popup_fce4790c45c07470f467f4b1c023b82f = L.popup({
+  "maxWidth": 350,
+});
+
+        
+            
+                var html_97d883f6c1f487def0c1e539cda1e227 = $(`<div id="html_97d883f6c1f487def0c1e539cda1e227" style="width: 100.0%; height: 100.0%;">          <div style="width: 280px; height: 220px; overflow-y: auto; font-size: 14px;">         <b>Stop #4 - ESTATE SALE</b><br><br>          <b>Cluster:</b> 3<br>         <b>Score:</b> 49<br>         <b>Start:</b> 8:00 AM<br>         <b>Date:</b> Sat  Mar 21  																			8am 																			 to 1pm<br>         <b>Address:</b> 316, Cedar Avenue, Spring Creek Manor, Hershey, Derry Township, Dauphin County, Pennsylvania, 17033, United States<br>         <b>Home Drive:</b> 24 min<br>          <b>Description:</b><br>         Saturday only, March 21 from 8 am to 1 pm.  Offering some furniture, including a very nice twin bed set, wool rugs, china, jewelry, patio and garden items, tools, benches, duck decoys, holiday decor, fishing poles, books, some electronics, vintage sugar shakers and other really nice items.  Cash only.<br><br>          <b>Details:</b><br>         None<br><br>          <b>Breakdown</b><br>         Distance: 2<br>         Time: 22<br>         Type: 10<br>         Keywords: 15<br><br>          <b>Cluster Info</b><br>         Cluster Value: 69<br>         Distance From Current Start: 12.1 miles<br>         Drive Time: 20 min<br>         Arrival: 8:29 AM<br>         Wait: 0 min<br>         Begin Shopping: 8:29 AM<br>         Estimated Cluster Finish: 8:38 AM<br><br>          <a href="https://www.google.com/maps/search/?api=1&query=316%2C+Cedar+Avenue%2C+Spring+Creek+Manor%2C+Hershey%2C+Derry+Township%2C+Dauphin+County%2C+Pennsylvania%2C+17033%2C+United+States" target="_blank">Open in Google Maps</a>     </div>     </div>`)[0];
+                popup_fce4790c45c07470f467f4b1c023b82f.setContent(html_97d883f6c1f487def0c1e539cda1e227);
+            
+        
+
+        marker_e22f36fabe2cb5904082a66cc8f9873a.bindPopup(popup_fce4790c45c07470f467f4b1c023b82f)
+        ;
+
+        
+    
+    
+            marker_e22f36fabe2cb5904082a66cc8f9873a.bindTooltip(
+                `<div>
+                     4. ESTATE SALE
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_e22f36fabe2cb5904082a66cc8f9873a.setIcon(div_icon_b6cdd8c77692878cc7b1cbe2ddaecec0);
+            
+    
+            map_a87699eb34a20dff27009b0a894ea714.fitBounds(
+                [[40.2991946, -76.8146159], [40.2991946, -76.8146159], [40.2760675, -76.8358185], [40.2786581, -76.6534566], [40.2377, -76.9596]],
+                {}
+            );
+        
+</script>
+</html>
