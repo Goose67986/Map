@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_f51088b9a687c54ef8537c71ef8ecc71 {
+                #map_beafc77d0392c40e79c934e6d0ce1b18 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -54,29 +54,520 @@
 <body>
     
     
-    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 26-03-2026 20:16:58 </div> 
+<style>
+  #saleSelectionPanel {
+    position: fixed;
+    top: 46%;
+    right: -216px;
+    width: 216px;
+    transform: translateY(-50%);
+    z-index: 999999;
+    transition: right 0.35s ease;
+    font-family: Arial, sans-serif;
+  }
+
+  #saleSelectionPanel.expanded {
+    right: 0;
+  }
+
+  #saleSelectionTab {
+    position: absolute;
+    left: -38px;
+    top: 50%;
+    transform: translateY(-50%) rotate(-90deg);
+    transform-origin: center;
+    background: #1f1f1f;
+    color: white;
+    border: 1px solid #555;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    padding: 7px 12px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  #saleSelectionBody {
+    background: rgba(255,255,255,0.97);
+    border: 1px solid #777;
+    border-right: none;
+    border-radius: 10px 0 0 10px;
+    box-shadow: -2px 2px 10px rgba(0,0,0,0.25);
+    padding: 12px;
+  }
+
+  #saleSelectionBody .sec-title {
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  #saleSelectionBody button {
+    display: block;
+    width: 100%;
+    margin: 8px 0;
+    padding: 8px 10px;
+    border: 1px solid #666;
+    border-radius: 6px;
+    background: #f5f5f5;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  #saleSelectionBody button:hover {
+    background: #e9e9e9;
+  }
+
+  #saleSelectionBody .count {
+    margin-top: 8px;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .sale-select-wrap {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #ddd;
+    font-family: Arial, sans-serif;
+  }
+</style>
+
+<script>
+window.saleData = window.saleData || {};
+window.saleSelectionKey = "yard_sale_selected_ids";
+window.saleSelectionPanelKey = "yard_sale_selection_panel_open";
+
+function getSelectedSaleIds() {
+    try {
+        return JSON.parse(localStorage.getItem(window.saleSelectionKey) || "[]");
+    } catch (err) {
+        return [];
+    }
+}
+
+function setSelectedSaleIds(ids) {
+    localStorage.setItem(window.saleSelectionKey, JSON.stringify(ids));
+}
+
+function isSaleSelected(saleId) {
+    return getSelectedSaleIds().includes(saleId);
+}
+
+function toggleSaleSelection(saleId, isChecked) {
+    const ids = new Set(getSelectedSaleIds());
+    if (isChecked) {
+        ids.add(saleId);
+    } else {
+        ids.delete(saleId);
+    }
+    setSelectedSaleIds(Array.from(ids));
+    updateSelectedCount();
+}
+
+function syncSaleCheckbox(saleId) {
+    const checkbox = document.getElementById("sale-check-" + saleId);
+    if (checkbox) {
+        checkbox.checked = isSaleSelected(saleId);
+    }
+}
+
+function registerSaleData(saleObj) {
+    window.saleData[saleObj.id] = saleObj;
+    updateSelectedCount();
+}
+
+function updateSelectedCount() {
+    const countEl = document.getElementById("selected-sale-count");
+    if (!countEl) return;
+    const ids = getSelectedSaleIds();
+    countEl.textContent = ids.length + " sale" + (ids.length === 1 ? "" : "s") + " selected";
+}
+
+function clearSelectedSales() {
+    setSelectedSaleIds([]);
+    Object.keys(window.saleData).forEach(function(saleId) {
+        syncSaleCheckbox(saleId);
+    });
+    updateSelectedCount();
+}
+
+function exportSelectedSales() {
+    const ids = getSelectedSaleIds();
+    const selected = ids
+        .map(id => window.saleData[id])
+        .filter(Boolean);
+
+    const payload = {
+        generated_at: new Date().toISOString(),
+        selected_count: selected.length,
+        events: selected
+    };
+
+    const blob = new Blob(
+        [JSON.stringify(payload, null, 2)],
+        { type: "application/json" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "selected_sales.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function setSalePanelExpanded(isExpanded) {
+    const panel = document.getElementById("saleSelectionPanel");
+    if (!panel) return;
+    panel.classList.toggle("expanded", !!isExpanded);
+    localStorage.setItem(window.saleSelectionPanelKey, isExpanded ? "true" : "false");
+}
+
+function toggleSalePanel() {
+    const panel = document.getElementById("saleSelectionPanel");
+    if (!panel) return;
+    setSalePanelExpanded(!panel.classList.contains("expanded"));
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    updateSelectedCount();
+    const shouldOpen = localStorage.getItem(window.saleSelectionPanelKey) === "true";
+    setSalePanelExpanded(shouldOpen);
+});
+</script>
+
+<div id="saleSelectionPanel">
+  <div id="saleSelectionTab" onclick="toggleSalePanel()">Selections</div>
+  <div id="saleSelectionBody">
+    <div class="sec-title">Sale Selection</div>
+    <button onclick="exportSelectedSales()">Export Selected Sales</button>
+    <button onclick="clearSelectedSales()">Clear Selected</button>
+    <div id="selected-sale-count" class="count">0 sales selected</div>
+  </div>
+</div>
     
-    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 26-03-2026 20:17:02 </div> 
+<script>
+registerSaleData({"id": "sale_1", "name": "Yard Sale", "description": "Household, Pan Set, Flatware, Mens Trousers mostly 42/30, Dish Sets, Rubber Stamps, hats, lamps, tv and tv rack, older catalogs, etc", "date": "Sat\n\nMar 28\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t7am\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t to 2pm", "address": "1918 Reservoir Dr, Carlisle, PA 17013, USA", "latitude": 40.2334216, "longitude": -77.1845617, "source_link": "https://gsalr.com/yard-sale-carlisle-pa-38676071.html", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=1918+Reservoir+Dr%2C+Carlisle%2C+PA+17013%2C+USA"});
+marker_f564429d4615c04d9d9c3c976041f8a2.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_1");
+    }, 40);
+});
+</script>
     
-    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 26-03-2026 20:17:05 </div> 
+<script>
+registerSaleData({"id": "sale_2", "name": "Sportsman\u2019s Yard Sale", "description": "Hunting,Fishing,Archery,Ned Smith Prints,Quality Knives,Decoys,Cast Iron cookware,tools,Vintage porcelain barber chair,Craftsman upright air compressor,Traps,Petroliana advertising,antiques,lawn cart,fire hydrant,crocks,pottery,and much much more", "date": "Sat\n\nMar 28\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t7am\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t to 3pm", "address": "1229 Mapledale Rd, Elizabethtown, PA 17022, USA", "latitude": 40.1985964, "longitude": -76.5848288, "source_link": "https://gsalr.com/sportsmans-yard-sale-elizabethtown-pa-38676085.html", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=1229+Mapledale+Rd%2C+Elizabethtown%2C+PA+17022%2C+USA"});
+marker_d929084ff9e601b6be3fdb31d7aeb5cd.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_2");
+    }, 40);
+});
+</script>
     
-    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 26-03-2026 20:17:08 </div> 
+<script>
+registerSaleData({"id": "sale_3", "name": "Hilltop Church Rummage Sale", "description": "27 MAR  8AM - 4PM\n28 MAR  8AM - 12PM\n($1/BAG DAY!)\n\n202 WEST BUTLER STREET\nMT HOLLY SPRINGS", "date": "Fri\n\nMar 27\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t8am\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t to 5pm\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\n\n\nSat\n\nMar 28\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t8am\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t to 5pm", "address": "202, West Butler Street, Mount Holly Springs, Cumberland County, Pennsylvania, 17065, United States", "latitude": 40.1180775, "longitude": -77.1944387, "source_link": "https://gsalr.com/hilltop-church-rummage-sale-mount-holly-springs-pa-38670615.html", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=202%2C+West+Butler+Street%2C+Mount+Holly+Springs%2C+Cumberland+County%2C+Pennsylvania%2C+17065%2C+United+States"});
+marker_1d9707b5428ab173cf3db1d07f7f076a.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_3");
+    }, 40);
+});
+</script>
     
-    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 26-03-2026 20:17:11 </div> 
+<script>
+registerSaleData({"id": "sale_4", "name": "Yard Sale In The Warehouse", "description": "25 Laurel St. York, Pa. March 26-29. 7:00 til 4:00. Big green building, you can\u2019t miss. Parking along guard rail coming down Locust Street or in big parking lot in front of building. This was an active wood working shop. Most items have sawdust on them. Lots of quality, wood, molding, beams, plywood, cabinets, doors, large screen, doors, wood carts, wood racks, racks, saw horses, artwork, furniture, tables, some house of goods, and a lot more. Everything in this place has there for a long time. Review pictures.", "date": "Thu\n\nMar 26\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t7am\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t to 4pm\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\n\n\nFri\n\nMar 27\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t7am\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t to 4pm\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\n\n\nSat\n\nMar 28\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t7am\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t to 4pm\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\n\n\nSun\n\nMar 29\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t7am\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t to 3pm", "address": "25, Laurel Street, North York, York County, Pennsylvania, 17404, United States", "latitude": 39.9775758, "longitude": -76.731846, "source_link": "https://gsalr.com/yard-sale-in-the-york-pa-38670635.html", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=25%2C+Laurel+Street%2C+North+York%2C+York+County%2C+Pennsylvania%2C+17404%2C+United+States"});
+marker_af3d2efedf302ea4dd2fd69c9aa1b2b0.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_4");
+    }, 40);
+});
+</script>
     
-    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 26-03-2026 20:17:14 </div> 
+<script>
+registerSaleData({"id": "sale_5", "name": "SPRING CLEANING YORK REVOLUTION YARDSALE", "description": "The York Revolution Clubhouse is hosting a Community Yardsale on March 28th & 29th from 8am-3pm.\n\nThere will be:\n- 15+ Community Vendors\n- Game Memorabilia\n- $5 Tours of our Player Clubhouse\n- Game Worn/Retired Jerseys\n- And more!", "date": "Sat\n\nMar 28\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t8am\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t to 3pm\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\n\n\nSun\n\nMar 29\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t8am\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t to 3pm", "address": "5, Brooks Robinson Way, York Historic District, York, York County, Pennsylvania, 17401, United States", "latitude": 39.9679387, "longitude": -76.729179, "source_link": "https://gsalr.com/spring-cleaning-york-revolution-york-pa-38677017.html", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=5%2C+Brooks+Robinson+Way%2C+York+Historic+District%2C+York%2C+York+County%2C+Pennsylvania%2C+17401%2C+United+States"});
+marker_aff35a4233176498c9cf54a970de938a.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_5");
+    }, 40);
+});
+</script>
     
-    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 26-03-2026 20:17:17 </div> 
+<script>
+registerSaleData({"id": "sale_6", "name": "Garage/moving sale", "description": "MechanicTools, lawn tools, outdoor Christmas decorations, odds and ends.\nEverything must go, so bring your dollars and most offers will be accepted.", "date": "Sat\n\nMar 28\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t8am\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t to 3pm\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\n\n\nSun\n\nMar 29\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t8am\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t to 3pm", "address": "901, Lantern Drive, Weavertown, North Lebanon Township, Lebanon County, Pennsylvania, 17046, United States", "latitude": 40.3614, "longitude": -76.399834, "source_link": "https://gsalr.com/garagemoving-sale-lebanon-pa-38676013.html", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=901%2C+Lantern+Drive%2C+Weavertown%2C+North+Lebanon+Township%2C+Lebanon+County%2C+Pennsylvania%2C+17046%2C+United+States"});
+marker_1567b0594e7a3759a2fe5f2d0900d5d5.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_6");
+    }, 40);
+});
+</script>
     
-    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 26-03-2026 20:17:21 </div> 
+<script>
+registerSaleData({"id": "sale_7", "name": "Enola pickers estate sale - garage & moving sales - yard estate sale - craigslist", "description": "\u2692\ufe0fENOLA PA PICKERS SALE\u2692\ufe0f Saturday 3/28 (8am - 2pm) \u2728\ufe0f2390 Wertz Ln, Enola, PA 17025 MAKE A PILE &amp; SMILE @ OUR AMAZING DEALS! We'll be in ENOLA PA this Saturday for a good ol' fashioned Pickers...", "date": "saturday 2026-03-28<br>8am", "address": "2390 Wertz Ln, Enola, PA 17025, USA", "latitude": 40.2981916, "longitude": -77.0074565, "source_link": "https://harrisburg.craigslist.org/gms/d/summerdale-enola-pickers-estate-sale/7923475823.html", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=2390+Wertz+Ln%2C+Enola%2C+PA+17025%2C+USA"});
+marker_c1f10c4c6996ede7679c1bb4cd1b73b7.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_7");
+    }, 40);
+});
+</script>
     
-    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 26-03-2026 20:17:24 </div> 
+<script>
+registerSaleData({"id": "sale_8", "name": "Large estate sale - garage & moving sales - yard estate sale - craigslist", "description": "Huge estate sale this Friday, March 27 and Saturday, March 28 8 to 2 both days. Lots of kitchen items, cooking related items, decorative items, modern furniture, three fur coats. 2005 Mercedes suv...", "date": "friday 2026-03-27<br>saturday 2026-03-28<br>8 am", "address": "Ethel Street, Mount Pleasant, Allison Hill, Harrisburg, Dauphin County, Pennsylvania, 17103, United States", "latitude": 40.2685001, "longitude": -76.8621678, "source_link": "https://harrisburg.craigslist.org/gms/d/harrisburg-large-estate-sale/7923450696.html", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=Ethel+Street%2C+Mount+Pleasant%2C+Allison+Hill%2C+Harrisburg%2C+Dauphin+County%2C+Pennsylvania%2C+17103%2C+United+States"});
+marker_2c395c837158fc0be275b90252a43a30.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_8");
+    }, 40);
+});
+</script>
     
-    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 26-03-2026 20:17:27 </div> 
+<script>
+registerSaleData({"id": "sale_9", "name": "Yard sale Sat 8:00 till 2:00 - garage & moving sales - yard estate sale - craigslist", "description": "28 inch Samsung tv. Large trash cans. Pool noodles. Lots of kitchen utensils Electric knife. Lots of ladies purses. Ladies boots. Christmas items. Ladies clothing many new. 2 new homemade afghans....", "date": "saturday 2026-03-28<br>8:00", "address": "Altavista Ave, Lower Paxton Township, PA 17109, USA", "latitude": 40.2760675, "longitude": -76.8358185, "source_link": "https://harrisburg.craigslist.org/gms/d/harrisburg-yard-sale-sat-800-till-200/7923287654.html", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=Altavista+Ave%2C+Lower+Paxton+Township%2C+PA+17109%2C+USA"});
+marker_54bf60857a1b3dcdadbb11fc30f4394b.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_9");
+    }, 40);
+});
+</script>
     
-    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 26-03-2026 20:17:30 </div> 
+<script>
+registerSaleData({"id": "sale_10", "name": "Estate sale furniture and household items - garage & moving sales - yard estate sale - craigslist", "description": "Serious inquires only please. Pickup in Harrisburg near the colonial park mall. Pickup is available most days after 4pm and most any time on the weekends. Vintage pineapple floor lamp - $100 Vintage...", "date": "wednesday 2026-03-25<br>saturday 2026-03-28<br>saturday 2026-04-04<br>8am", "address": "Miller Rd, Colonial Park, PA 17109, USA", "latitude": 40.2991946, "longitude": -76.8146159, "source_link": "https://harrisburg.craigslist.org/gms/d/harrisburg-estate-sale-furniture-and/7922908185.html", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=Miller+Rd%2C+Colonial+Park%2C+PA+17109%2C+USA"});
+marker_132653563644c164712fd3e0c3328b5d.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_10");
+    }, 40);
+});
+</script>
     
-    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 26-03-2026 20:17:33 </div> 
+<script>
+registerSaleData({"id": "sale_11", "name": "Even more estate sale items various furniture and household items - garage & moving sales - yard estate sale -...", "description": "Serious inquires only please. Pickup in Harrisburg near the colonial park mall. Pickup is available most days after 4pm and most any time on the weekends. Student desk - $50 Vintage student desk....", "date": "wednesday 2026-03-25<br>saturday 2026-03-28<br>7am", "address": "Miller Rd, Colonial Park, PA 17109, USA", "latitude": 40.2991946, "longitude": -76.8146159, "source_link": "https://harrisburg.craigslist.org/gms/d/harrisburg-even-more-estate-sale-items/7921904261.html", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=Miller+Rd%2C+Colonial+Park%2C+PA+17109%2C+USA"});
+marker_ff3e6e69ac0f15cde5251ef20402e595.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_11");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_12", "name": "More estate sale items various furniture and household items - garage & moving sales - yard estate sale - craigslist", "description": "Serious inquires only please. Pickup in Harrisburg near the colonial park mall. Pickup is available most days after 4pm and most any time on the weekends. Keg Fridge - Vintage Admiral (1950\u2019s) $150...", "date": "saturday 2026-03-28<br>7am", "address": "Miller Rd, Colonial Park, PA 17109, USA", "latitude": 40.2991946, "longitude": -76.8146159, "source_link": "https://harrisburg.craigslist.org/gms/d/harrisburg-more-estate-sale-items/7921507105.html", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=Miller+Rd%2C+Colonial+Park%2C+PA+17109%2C+USA"});
+marker_08c775ec9282a88dcaa5a1f41718bb3c.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_12");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_13", "name": "Annual Spring Consignment Sale", "description": "Public Auction: \"Annual Spring Consignment Sale\" by Rebecca Lauver Auctioneer. Auction will be held on Sat Mar 28 @ 08:00AM at 6130 South Susquehanna Trail in Port Trevorton, PA 17864. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 08:00AM", "address": "6130 S Susquehanna Trail, Port Trevorton, PA 17864, USA", "latitude": 40.684684, "longitude": -76.8892931, "source_link": "https://www.auctionzip.com/Listings/4117762.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=6130+S+Susquehanna+Trail%2C+Port+Trevorton%2C+PA+17864%2C+USA"});
+marker_fdc959f8bf62d828a00b662fbbff62c6.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_13");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_14", "name": "Rays of Light Haven -Benefit &amp; Consignment Auction", "description": "Public Auction: \"Rays of Light Haven -Benefit & Consignment Auction\" by Lykens Valley Auctions. Auction will be held on Sat Mar 28 @ 08:30AM at 4655 Cedar Springs Rd. in Mifflintown, PA 17059. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 08:30AM", "address": "Cedar Springs Road, Mifflintown, Juniata County, Pennsylvania, 17059, United States", "latitude": 40.5683016, "longitude": -77.3925984, "source_link": "https://www.auctionzip.com/Listings/4126082.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=Cedar+Springs+Road%2C+Mifflintown%2C+Juniata+County%2C+Pennsylvania%2C+17059%2C+United+States"});
+marker_cf20bd181d6f6384574afe61bc9820a3.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_14");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_15", "name": "March Building Materials auction", "description": "Public Auction: \"March Building Materials auction\" by KOSER AUCTIONS. Auction will be held on Sat Mar 28 @ 08:30AM at 523 Koser Road in Elizabethtown, PA 17022. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 08:30AM", "address": "523 Koser Rd, Elizabethtown, PA 17022, USA", "latitude": 40.191134, "longitude": -76.58979459999999, "source_link": "https://www.auctionzip.com/Listings/4125493.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=523+Koser+Rd%2C+Elizabethtown%2C+PA+17022%2C+USA"});
+marker_f574ab9f917758d5e58861ec42dd40be.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_15");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_16", "name": "Well stocked farm Shop Antique Tractors &amp; Equipnt", "description": "Public Auction: \"Well stocked farm Shop, Antique Tractors & Equipnt\" by Leaman Auctions Ltd.. Auction will be held on Sat Mar 28 @ 08:30AM at 1287 West Springfield Rd., Seven Valleys in Seven Valleys, PA 17360. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 08:30AM", "address": "1287, West Springfield Road, Springfield Township, York County, Pennsylvania, 17360, United States", "latitude": 39.8267069, "longitude": -76.7229573, "source_link": "https://www.auctionzip.com/Listings/4105189.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=1287%2C+West+Springfield+Road%2C+Springfield+Township%2C+York+County%2C+Pennsylvania%2C+17360%2C+United+States"});
+marker_f271617285cb3a10353383df65dff28e.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_16");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_17", "name": "CATALOG AMERICANA ANTIQUES AUCTION", "description": "Public Auction: \"CATALOG AMERICANA ANTIQUES AUCTION\" by Pa OnSITE AUCTION CO.. Auction will be held on Sat Mar 28 @ 08:30AM at Eagles Pavilion Building, 427 Mengus Mill Rd. in Littlestown, PA 17340. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 08:30AM", "address": "427 Mengus Mill Rd, Littlestown, PA 17340, USA", "latitude": 39.7324206, "longitude": -77.0947721, "source_link": "https://www.auctionzip.com/Listings/4119227.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=427+Mengus+Mill+Rd%2C+Littlestown%2C+PA+17340%2C+USA"});
+marker_44acf02e26cf7b8e8868854bc1920a22.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_17");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_18", "name": "Kubota Tractor &amp; UTV Furniture Tools Bee Farm", "description": "Public Auction: \"Kubota Tractor & UTV, Furniture, Tools, Bee, Farm\" by Rentzels Auction Service INC.. Auction will be held on Sat Mar 28 @ 09:00AM at 120 N Winding Rd in Wellsville, PA 17365. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 09:00AM", "address": "120 N Winding Rd, Wellsville, PA 17365, USA", "latitude": 40.03547210000001, "longitude": -76.9445374, "source_link": "https://www.auctionzip.com/Listings/4118165.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=120+N+Winding+Rd%2C+Wellsville%2C+PA+17365%2C+USA"});
+marker_c8cccc632ccddca1ec98dd6d9ee6642e.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_18");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_19", "name": "68th BROWN TOOL ANTIQUE TOOL AUCTION", "description": "Public Auction: \"68th BROWN TOOL ANTIQUE TOOL AUCTION\" by Brown Tool Auctions. Auction will be held on Sat Mar 28 @ 09:00AM at 2000 Loucks Rd in York, PA 17408. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 09:00AM", "address": "Wyndham Garden York, 2000, Loucks Road, Shiloh, York, York County, Pennsylvania, 17408, United States", "latitude": 39.9702337, "longitude": -76.7774385, "source_link": "https://www.auctionzip.com/Listings/4121089.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=Wyndham+Garden+York%2C+2000%2C+Loucks+Road%2C+Shiloh%2C+York%2C+York+County%2C+Pennsylvania%2C+17408%2C+United+States"});
+marker_261bcbcd0592170b56a98a2fc53e53e9.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_19");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_20", "name": "FARM EQUIPMENT &amp; FARM RELATED ITEMS", "description": "Public Auction: \"FARM EQUIPMENT & FARM RELATED ITEMS\" by Jones & Martin Auctions LLC. Auction will be held on Sat Mar 28 @ 09:00AM at 221 Crossroad School Rd. in Newville, PA 17241. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 09:00AM", "address": "221 Crossroad School Rd, Newville, PA 17241, USA", "latitude": 40.1830227, "longitude": -77.3449821, "source_link": "https://www.auctionzip.com/Listings/4099129.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=221+Crossroad+School+Rd%2C+Newville%2C+PA+17241%2C+USA"});
+marker_1a1d11b9820e5eb3cec11ade636dbddb.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_20");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_21", "name": "Firearms - Coins - Collectibles - Household - Tool", "description": "Public Auction: \"Firearms - Coins - Collectibles - Household - Tool\" by John Mowen Auctioneering. Auction will be held on Sat Mar 28 @ 09:00AM at Pond Bank Community Center, 6492 Duffield Road in Chambersburg, PA 17202. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 09:00AM", "address": "9997 Duffield Rd, Chambersburg, PA 17201, USA", "latitude": 39.8727622, "longitude": -77.5435648, "source_link": "https://www.auctionzip.com/Listings/4118086.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=9997+Duffield+Rd%2C+Chambersburg%2C+PA+17201%2C+USA"});
+marker_2ab6bfecc71ae41b9076f413c4841319.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_21");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_22", "name": "Real Estate-Antiques-Collectibles-Putt painting", "description": "Public Auction: \"Real Estate-Antiques-Collectibles-Putt painting\" by KEVIN M. WICKARD and TODD UMBRELL Auctioneering. Auction will be held on Sat Mar 28 @ 09:00AM at 8 Dogwood Drive in Mt Holly Springs, PA 17065. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 09:00AM", "address": "8 Dogwood Dr, Mt Holly Springs, PA 17065, USA", "latitude": 40.1262626, "longitude": -77.19291419999999, "source_link": "https://www.auctionzip.com/Listings/4106048.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=8+Dogwood+Dr%2C+Mt+Holly+Springs%2C+PA+17065%2C+USA"});
+marker_8529b145d528d381cd30ed9ac734d28a.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_22");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_23", "name": "3 BR 1 BA HOUSE LG SHOP ON 1.97 AC +CONTENTS", "description": "Public Auction: \"3 BR 1 BA HOUSE, LG SHOP ON 1.97 AC +CONTENTS\" by Joel Heisey L&H Auctions Inc.. Auction will be held on Sat Mar 28 @ 09:00AM at 4010 Oak Street in Lebanon, PA 17042. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 09:00AM", "address": "4010, Oak Street, South Annville Township, Lebanon County, Pennsylvania, 17042, United States", "latitude": 40.2978477, "longitude": -76.4800143, "source_link": "https://www.auctionzip.com/Listings/4093706.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=4010%2C+Oak+Street%2C+South+Annville+Township%2C+Lebanon+County%2C+Pennsylvania%2C+17042%2C+United+States"});
+marker_3761440f32814e5fddb9e83381b1334b.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_23");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_24", "name": "Public Coin Auction", "description": "Public Auction: \"Public Coin Auction\" by Frank Coleman. Auction will be held on Sat Mar 28 @ 09:00AM at Four Points by Sheraton Hotel and Suites, 1650 Toronita St in York, PA 17402. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 09:00AM", "address": "1650 Toronita St, York, PA 17402, USA", "latitude": 39.985852, "longitude": -76.72829999999999, "source_link": "https://www.auctionzip.com/Listings/4112756.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=1650+Toronita+St%2C+York%2C+PA+17402%2C+USA"});
+marker_10b9906272c9de4ccd47e203198f9cde.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_24");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_25", "name": "Milk Bottle/Dairy Collectibles Auction", "description": "Public Auction: \"Milk BottleDairy Collectibles Auction\" by Larry Swartz, Auctioneer. Auction will be held on Sat Mar 28 @ 09:00AM at 945 Baltimore Pike in Gettysburg, PA 17325. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 09:00AM", "address": "Comfort Suites, 945, Baltimore Pike, Gettysburg, Adams County, Pennsylvania, 17325, United States", "latitude": 39.81805, "longitude": -77.2275242, "source_link": "https://www.auctionzip.com/Listings/4113857.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=Comfort+Suites%2C+945%2C+Baltimore+Pike%2C+Gettysburg%2C+Adams+County%2C+Pennsylvania%2C+17325%2C+United+States"});
+marker_453962f38d80598f875db15131e165e9.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_25");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_26", "name": "ELIZABETHTOWN 21 ACRE FARM", "description": "Public Auction: \"ELIZABETHTOWN 21 ACRE FARM\" by Hess Auction Group. Auction will be held on Sat Mar 28 @ 09:00AM at 230 S. Hertzler Rd. in Elizabethtown, PA 17022. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 09:00AM", "address": "230 S Hertzler Rd, Elizabethtown, PA 17022, USA", "latitude": 40.168947, "longitude": -76.6535306, "source_link": "https://www.auctionzip.com/Listings/4114525.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=230+S+Hertzler+Rd%2C+Elizabethtown%2C+PA+17022%2C+USA"});
+marker_a58684e2f4c543a0b1da1dc943d2bf6b.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_26");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_27", "name": "Gold Coins", "description": "Public Auction: \"Gold Coins\" by Richard P Murry Auctioneer LLC. Auction will be held on Sat Mar 28 @ 10:00AM at 5532 Spring Road in Shermans Dale, PA 17090. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 10:00AM", "address": "5532, Spring Road, Dromgold, Carroll Township, Perry County, Pennsylvania, 17090, United States", "latitude": 40.3262559, "longitude": -77.1776611, "source_link": "https://www.auctionzip.com/Listings/4126332.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=5532%2C+Spring+Road%2C+Dromgold%2C+Carroll+Township%2C+Perry+County%2C+Pennsylvania%2C+17090%2C+United+States"});
+marker_30c795cd49a9ef5566197fe648a4dd5b.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_27");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_28", "name": "3 Parcels of REAL ESTATE - Farm Tractor-skidloader", "description": "Public Auction: \"3 Parcels of REAL ESTATE - Farm Tractor-skidloader\" by STERMER'S AUCTION SERVICE. Auction will be held on Sat Mar 28 @ 10:00AM at 3100 Lake Meade Rd. in East Berlin, PA 17316. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 10:00AM", "address": "3100 Lake Meade Rd, East Berlin, PA 17316, USA", "latitude": 40.0046826, "longitude": -77.02209309999999, "source_link": "https://www.auctionzip.com/Listings/4113237.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=3100+Lake+Meade+Rd%2C+East+Berlin%2C+PA+17316%2C+USA"});
+marker_63124287e8fe9d404b80bd90a6650b25.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_28");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_29", "name": "Coins and Currency Auction", "description": "Public Auction: \"Coins and Currency Auction\" by Richard P Murry Auctioneer LLC. Auction will be held on Sat Mar 28 @ 10:00AM at 5532 Spring Road in Shermans Dale, PA 17090. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 10:00AM", "address": "5532, Spring Road, Dromgold, Carroll Township, Perry County, Pennsylvania, 17090, United States", "latitude": 40.3262559, "longitude": -77.1776611, "source_link": "https://www.auctionzip.com/Listings/4112516.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=5532%2C+Spring+Road%2C+Dromgold%2C+Carroll+Township%2C+Perry+County%2C+Pennsylvania%2C+17090%2C+United+States"});
+marker_6305b742d61c0b17932d58e8990d9e6d.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_29");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_30", "name": "30 Acre Farm Kubota RTV&amp; Tractor FurnitureTools", "description": "Public Auction: \"30 Acre Farm, Kubota RTV& Tractor, Furniture,Tools\" by Rentzels Auction Service INC.. Auction will be held on Sat Mar 28 @ 11:00AM at 120 N winding Rd in Wellsville, PA 17365. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 11:00AM", "address": "120 N Winding Rd, Wellsville, PA 17365, USA", "latitude": 40.03547210000001, "longitude": -76.9445374, "source_link": "https://www.auctionzip.com/Listings/4116750.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=120+N+Winding+Rd%2C+Wellsville%2C+PA+17365%2C+USA"});
+marker_fd243954df66cb66c4f5734ad2fe05d2.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_30");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_31", "name": "COINS CURRENCY SILVER GOLD &amp; MORE!!!", "description": "Public Auction: \"COINS, CURRENCY, SILVER, GOLD & MORE!!!\" by Stoner's Auction. Auction will be held on Sat Mar 28 @ 12:00PM at 14738 Bonnair Road in Glen Rock, PA 17327. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 12:00PM", "address": "14738 Bonnair Rd, Glen Rock, PA 17327, USA", "latitude": 39.7529203, "longitude": -76.7555872, "source_link": "https://www.auctionzip.com/Listings/4120687.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=14738+Bonnair+Rd%2C+Glen+Rock%2C+PA+17327%2C+USA"});
+marker_006b631437aebe1865610e5f3c37f5ef.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_31");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_32", "name": "COUNTRY RANCH HOME W/3 BAY SHOP", "description": "Public Auction: \"COUNTRY RANCH HOME W3 BAY SHOP\" by Roy D. Shirk, Auctioneer. Auction will be held on Sat Mar 28 @ 12:00PM at 122 Crooked Hill Road in Hummelstown, PA 17036. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 12:00PM", "address": "122 Crooked Hill Rd, Hummelstown, PA 17036, USA", "latitude": 40.3370133, "longitude": -76.6752843, "source_link": "https://www.auctionzip.com/Listings/4106454.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=122+Crooked+Hill+Rd%2C+Hummelstown%2C+PA+17036%2C+USA"});
+marker_f4af758f939434ad521bd2cb8f2d86d8.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_32");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_33", "name": "Grocery Auction", "description": "Public Auction: \"Grocery Auction\" by Dawn Miller Auctioneer. Auction will be held on Sat Mar 28 @ 01:00PM at Fremont Social Hall, Mill Race Road in Mt Pleasant Mills, PA 17853. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 01:00PM", "address": "299 Mill Race Rd, Mt Pleasant Mills, PA 17853, USA", "latitude": 40.7247187, "longitude": -77.01150969999999, "source_link": "https://www.auctionzip.com/Listings/4114252.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=299+Mill+Race+Rd%2C+Mt+Pleasant+Mills%2C+PA+17853%2C+USA"});
+marker_5142ca4156b7f1eb80a4112877a7669a.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_33");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_34", "name": "ANTIQUES-VINTAGE HALLOWEEN-CLOCKS-WATCHES-YARD", "description": "Public Auction: \"ANTIQUES-VINTAGE HALLOWEEN-CLOCKS-WATCHES-YARD\" by Thomasville Country Auction Hall. Auction will be held on Sat Mar 28 @ 04:00PM at 5250 LINCOLN HWY WEST in THOMASVILLE, PA 17364. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 04:00PM", "address": "5250, Lincoln Highway West, Thomasville, Jackson Township, York County, Pennsylvania, 17364, United States", "latitude": 39.9287075, "longitude": -76.8501501, "source_link": "https://www.auctionzip.com/Listings/4113549.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=5250%2C+Lincoln+Highway+West%2C+Thomasville%2C+Jackson+Township%2C+York+County%2C+Pennsylvania%2C+17364%2C+United+States"});
+marker_a03c2dc26940bb4ead629a34e3083e2f.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_34");
+    }, 40);
+});
+</script>
+    
+<script>
+registerSaleData({"id": "sale_35", "name": "AntiquesCollectiblesPrimitivesToolsToysJewelry", "description": "Public Auction: \"Antiques,Collectibles,Primitives,Tools,ToysJewelry\" by Stoner's Auction. Auction will be held on Sat Mar 28 @ 04:00PM at 14738 Bonnair Road in Glen Rock, PA 17327. See photos and more auction details on AuctionZip.com Now.", "date": "Sat Mar 28 - 04:00PM", "address": "14738 Bonnair Rd, Glen Rock, PA 17327, USA", "latitude": 39.7529203, "longitude": -76.7555872, "source_link": "https://www.auctionzip.com/Listings/4120688.html?kwd=&zip=17055&category=0", "details": "", "google_maps_link": "https://www.google.com/maps/search/?api=1&query=14738+Bonnair+Rd%2C+Glen+Rock%2C+PA+17327%2C+USA"});
+marker_44209c35b38c5a424f1a129786c67664.on('popupopen', function() {
+    setTimeout(function() {
+        syncSaleCheckbox("sale_35");
+    }, 40);
+});
+</script>
+    
+    <div style="position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: white; padding: 5px 10px; border-radius: 2px; font-size: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"> Updated: 26-03-2026 21:27:58 </div> 
     
 <!-- Weather Tab UI -->
 <style>
@@ -158,14 +649,14 @@
   });
 </script>
     
-            <div class="folium-map" id="map_f51088b9a687c54ef8537c71ef8ecc71" ></div>
+            <div class="folium-map" id="map_beafc77d0392c40e79c934e6d0ce1b18" ></div>
         
 </body>
 <script>
     
     
-            var map_f51088b9a687c54ef8537c71ef8ecc71 = L.map(
-                "map_f51088b9a687c54ef8537c71ef8ecc71",
+            var map_beafc77d0392c40e79c934e6d0ce1b18 = L.map(
+                "map_beafc77d0392c40e79c934e6d0ce1b18",
                 {
                     center: [40.2379, -76.9223],
                     crs: L.CRS.EPSG3857,
@@ -178,13 +669,13 @@
 
                 }
             );
-            L.control.scale().addTo(map_f51088b9a687c54ef8537c71ef8ecc71);
+            L.control.scale().addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
 
             
 
         
     
-            var tile_layer_bac2cb33a8acfa5fc4ad3e295076c342 = L.tileLayer(
+            var tile_layer_b6941ab6cf4b9d20671ee46f04f5d800 = L.tileLayer(
                 "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {
   "minZoom": 0,
@@ -201,10 +692,10 @@
             );
         
     
-            tile_layer_bac2cb33a8acfa5fc4ad3e295076c342.addTo(map_f51088b9a687c54ef8537c71ef8ecc71);
+            tile_layer_b6941ab6cf4b9d20671ee46f04f5d800.addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
         
     
-            var tile_layer_15357f4e4b015be914f572508bfa2bcd = L.tileLayer(
+            var tile_layer_a174f05aefaa3db8b191ce9b73309c44 = L.tileLayer(
                 "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
                 {
   "minZoom": 0,
@@ -221,10 +712,10 @@
             );
         
     
-            tile_layer_15357f4e4b015be914f572508bfa2bcd.addTo(map_f51088b9a687c54ef8537c71ef8ecc71);
+            tile_layer_a174f05aefaa3db8b191ce9b73309c44.addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
         
     
-            var tile_layer_d706e03bea08311b558baa398bf88028 = L.tileLayer(
+            var tile_layer_b80323c12e70c9d304a857bacef70c2d = L.tileLayer(
                 "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
                 {
   "minZoom": 0,
@@ -241,10 +732,10 @@
             );
         
     
-            tile_layer_d706e03bea08311b558baa398bf88028.addTo(map_f51088b9a687c54ef8537c71ef8ecc71);
+            tile_layer_b80323c12e70c9d304a857bacef70c2d.addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
         
     
-            var tile_layer_a9a3805063f81b96f3b58695453170b6 = L.tileLayer(
+            var tile_layer_c1b4ebb7ea25de2282c7731e4b5c5645 = L.tileLayer(
                 "https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
                 {
   "minZoom": 0,
@@ -261,39 +752,39 @@
             );
         
     
-            tile_layer_a9a3805063f81b96f3b58695453170b6.addTo(map_f51088b9a687c54ef8537c71ef8ecc71);
+            tile_layer_c1b4ebb7ea25de2282c7731e4b5c5645.addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
         
     
-            var layer_control_ed00cab0e441121e9122adfa4beeb0eb_layers = {
+            var layer_control_48e0cf49c9b2529485e66657b3cd2aba_layers = {
                 base_layers : {
-                    "openstreetmap" : tile_layer_bac2cb33a8acfa5fc4ad3e295076c342,
-                    "Satellite" : tile_layer_15357f4e4b015be914f572508bfa2bcd,
-                    "CartoDB Dark Matter" : tile_layer_d706e03bea08311b558baa398bf88028,
-                    "Esri Street Map" : tile_layer_a9a3805063f81b96f3b58695453170b6,
+                    "openstreetmap" : tile_layer_b6941ab6cf4b9d20671ee46f04f5d800,
+                    "Satellite" : tile_layer_a174f05aefaa3db8b191ce9b73309c44,
+                    "CartoDB Dark Matter" : tile_layer_b80323c12e70c9d304a857bacef70c2d,
+                    "Esri Street Map" : tile_layer_c1b4ebb7ea25de2282c7731e4b5c5645,
                 },
                 overlays :  {
                 },
             };
-            let layer_control_ed00cab0e441121e9122adfa4beeb0eb = L.control.layers(
-                layer_control_ed00cab0e441121e9122adfa4beeb0eb_layers.base_layers,
-                layer_control_ed00cab0e441121e9122adfa4beeb0eb_layers.overlays,
+            let layer_control_48e0cf49c9b2529485e66657b3cd2aba = L.control.layers(
+                layer_control_48e0cf49c9b2529485e66657b3cd2aba_layers.base_layers,
+                layer_control_48e0cf49c9b2529485e66657b3cd2aba_layers.overlays,
                 {
   "position": "bottomleft",
   "collapsed": true,
   "autoZIndex": true,
 }
-            ).addTo(map_f51088b9a687c54ef8537c71ef8ecc71);
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
 
         
     
-            var marker_22080e0b28d15268c6861cafa25552f1 = L.marker(
+            var marker_f564429d4615c04d9d9c3c976041f8a2 = L.marker(
                 [40.2334216, -77.1845617],
                 {
 }
-            ).addTo(map_f51088b9a687c54ef8537c71ef8ecc71);
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
         
     
-            var icon_64462b00e1c315eaeb889df120762cd6 = L.AwesomeMarkers.icon(
+            var icon_6f5848eaaef6de50f977db277d79fad2 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "darkblue",
   "iconColor": "white",
@@ -304,34 +795,34 @@
             );
         
     
-        var popup_5955a11930e76b55153b8678867047eb = L.popup({
+        var popup_2a4e573423c74228b99367ecc67a4556 = L.popup({
   "maxWidth": 300,
 });
 
         
             
-                var html_7c8b219a9b64386ce2f7f27fb7e20e24 = $(`<div id="html_7c8b219a9b64386ce2f7f27fb7e20e24" style="width: 100.0%; height: 100.0%;"><b>Yard Sale</b><br>Household, Pan Set, Flatware, Mens Trousers mostly 42/30, Dish Sets, Rubber Stamps, hats, lamps, tv and tv rack, older catalogs, etc<br><br><a href="geo:0,0?q=1918+Reservoir+Dr%2C+Carlisle%2C+PA+17013%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">1918 Reservoir Dr, Carlisle, PA 17013, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=1918+Reservoir+Dr%2C+Carlisle%2C+PA+17013%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat  Mar 28  																			7am 																			 to 2pm<br><a href="https://gsalr.com/yard-sale-carlisle-pa-38676071.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br></div>`)[0];
-                popup_5955a11930e76b55153b8678867047eb.setContent(html_7c8b219a9b64386ce2f7f27fb7e20e24);
+                var html_6516fc1a3047f17aee52425304e856e1 = $(`<div id="html_6516fc1a3047f17aee52425304e856e1" style="width: 100.0%; height: 100.0%;"><b>Yard Sale</b><br>Household, Pan Set, Flatware, Mens Trousers mostly 42/30, Dish Sets, Rubber Stamps, hats, lamps, tv and tv rack, older catalogs, etc<br><br><a href="geo:0,0?q=1918+Reservoir+Dr%2C+Carlisle%2C+PA+17013%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">1918 Reservoir Dr, Carlisle, PA 17013, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=1918+Reservoir+Dr%2C+Carlisle%2C+PA+17013%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat  Mar 28  																			7am 																			 to 2pm<br><a href="https://gsalr.com/yard-sale-carlisle-pa-38676071.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_1' onchange="toggleSaleSelection('sale_1', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_2a4e573423c74228b99367ecc67a4556.setContent(html_6516fc1a3047f17aee52425304e856e1);
             
         
 
-        marker_22080e0b28d15268c6861cafa25552f1.bindPopup(popup_5955a11930e76b55153b8678867047eb)
+        marker_f564429d4615c04d9d9c3c976041f8a2.bindPopup(popup_2a4e573423c74228b99367ecc67a4556)
         ;
 
         
     
     
-                marker_22080e0b28d15268c6861cafa25552f1.setIcon(icon_64462b00e1c315eaeb889df120762cd6);
+                marker_f564429d4615c04d9d9c3c976041f8a2.setIcon(icon_6f5848eaaef6de50f977db277d79fad2);
             
     
-            var marker_39d51918cc4d9c11f57bf7fe46e3f8a9 = L.marker(
+            var marker_d929084ff9e601b6be3fdb31d7aeb5cd = L.marker(
                 [40.1985964, -76.5848288],
                 {
 }
-            ).addTo(map_f51088b9a687c54ef8537c71ef8ecc71);
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
         
     
-            var icon_537b26ebf8817d1ff9a204354fff40c2 = L.AwesomeMarkers.icon(
+            var icon_aa39810cdbff53c5634ef67321d53120 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "darkblue",
   "iconColor": "white",
@@ -342,34 +833,34 @@
             );
         
     
-        var popup_9696d260175114ad4ab17141981c8717 = L.popup({
+        var popup_42b5d5ec6508cbac18d9abd01ad57c1f = L.popup({
   "maxWidth": 300,
 });
 
         
             
-                var html_90e49c128dcb32ebd89d8fb660c84db8 = $(`<div id="html_90e49c128dcb32ebd89d8fb660c84db8" style="width: 100.0%; height: 100.0%;"><b>Sportsman’s Yard Sale</b><br>Hunting,Fishing,Archery,Ned Smith Prints,Quality Knives,Decoys,Cast Iron cookware,tools,Vintage porcelain barber chair,Craftsman upright air compressor,Traps,Petroliana advertising,antiques,lawn cart,fire hydrant,crocks,pottery,and much much more<br><br><a href="geo:0,0?q=1229+Mapledale+Rd%2C+Elizabethtown%2C+PA+17022%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">1229 Mapledale Rd, Elizabethtown, PA 17022, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=1229+Mapledale+Rd%2C+Elizabethtown%2C+PA+17022%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat  Mar 28  																			7am 																			 to 3pm<br><a href="https://gsalr.com/sportsmans-yard-sale-elizabethtown-pa-38676085.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br></div>`)[0];
-                popup_9696d260175114ad4ab17141981c8717.setContent(html_90e49c128dcb32ebd89d8fb660c84db8);
+                var html_06d0c4857700f35f37b59f7c34c5baaf = $(`<div id="html_06d0c4857700f35f37b59f7c34c5baaf" style="width: 100.0%; height: 100.0%;"><b>Sportsman’s Yard Sale</b><br>Hunting,Fishing,Archery,Ned Smith Prints,Quality Knives,Decoys,Cast Iron cookware,tools,Vintage porcelain barber chair,Craftsman upright air compressor,Traps,Petroliana advertising,antiques,lawn cart,fire hydrant,crocks,pottery,and much much more<br><br><a href="geo:0,0?q=1229+Mapledale+Rd%2C+Elizabethtown%2C+PA+17022%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">1229 Mapledale Rd, Elizabethtown, PA 17022, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=1229+Mapledale+Rd%2C+Elizabethtown%2C+PA+17022%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat  Mar 28  																			7am 																			 to 3pm<br><a href="https://gsalr.com/sportsmans-yard-sale-elizabethtown-pa-38676085.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_2' onchange="toggleSaleSelection('sale_2', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_42b5d5ec6508cbac18d9abd01ad57c1f.setContent(html_06d0c4857700f35f37b59f7c34c5baaf);
             
         
 
-        marker_39d51918cc4d9c11f57bf7fe46e3f8a9.bindPopup(popup_9696d260175114ad4ab17141981c8717)
+        marker_d929084ff9e601b6be3fdb31d7aeb5cd.bindPopup(popup_42b5d5ec6508cbac18d9abd01ad57c1f)
         ;
 
         
     
     
-                marker_39d51918cc4d9c11f57bf7fe46e3f8a9.setIcon(icon_537b26ebf8817d1ff9a204354fff40c2);
+                marker_d929084ff9e601b6be3fdb31d7aeb5cd.setIcon(icon_aa39810cdbff53c5634ef67321d53120);
             
     
-            var marker_8cd3dc0f9ad8597cf821499d0e922b0d = L.marker(
+            var marker_1d9707b5428ab173cf3db1d07f7f076a = L.marker(
                 [40.1180775, -77.1944387],
                 {
 }
-            ).addTo(map_f51088b9a687c54ef8537c71ef8ecc71);
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
         
     
-            var icon_a38e4d3fa50a4500c2713166d6862076 = L.AwesomeMarkers.icon(
+            var icon_dc11e9071a0135017262906b0cfa51d5 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "darkblue",
   "iconColor": "white",
@@ -380,34 +871,34 @@
             );
         
     
-        var popup_13171faabd3c1a7456f958a00ee8c55d = L.popup({
+        var popup_9bf0ce9f1f15f6c849bb1ff64928cd18 = L.popup({
   "maxWidth": 300,
 });
 
         
             
-                var html_17c14a930006e692db1e019c8ad14933 = $(`<div id="html_17c14a930006e692db1e019c8ad14933" style="width: 100.0%; height: 100.0%;"><b>Hilltop Church Rummage Sale</b><br>27 MAR  8AM - 4PM 28 MAR  8AM - 12PM ($1/BAG DAY!)  202 WEST BUTLER STREET MT HOLLY SPRINGS<br><br><a href="geo:0,0?q=202%2C+West+Butler+Street%2C+Mount+Holly+Springs%2C+Cumberland+County%2C+Pennsylvania%2C+17065%2C+United+States" target="_blank" style="color:#4da3ff; font-weight:bold;">202, West Butler Street, Mount Holly Springs, Cumberland County, Pennsylvania, 17065, United States</a><br><a href="https://www.google.com/maps/search/?api=1&query=202%2C+West+Butler+Street%2C+Mount+Holly+Springs%2C+Cumberland+County%2C+Pennsylvania%2C+17065%2C+United+States" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Fri  Mar 27  																			8am 																			 to 5pm																		    Sat  Mar 28  																			8am 																			 to 5pm<br><a href="https://gsalr.com/hilltop-church-rummage-sale-mount-holly-springs-pa-38670615.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br></div>`)[0];
-                popup_13171faabd3c1a7456f958a00ee8c55d.setContent(html_17c14a930006e692db1e019c8ad14933);
+                var html_5aba82cd7f296337942f10b9fd40c757 = $(`<div id="html_5aba82cd7f296337942f10b9fd40c757" style="width: 100.0%; height: 100.0%;"><b>Hilltop Church Rummage Sale</b><br>27 MAR  8AM - 4PM 28 MAR  8AM - 12PM ($1/BAG DAY!)  202 WEST BUTLER STREET MT HOLLY SPRINGS<br><br><a href="geo:0,0?q=202%2C+West+Butler+Street%2C+Mount+Holly+Springs%2C+Cumberland+County%2C+Pennsylvania%2C+17065%2C+United+States" target="_blank" style="color:#4da3ff; font-weight:bold;">202, West Butler Street, Mount Holly Springs, Cumberland County, Pennsylvania, 17065, United States</a><br><a href="https://www.google.com/maps/search/?api=1&query=202%2C+West+Butler+Street%2C+Mount+Holly+Springs%2C+Cumberland+County%2C+Pennsylvania%2C+17065%2C+United+States" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Fri  Mar 27  																			8am 																			 to 5pm																		    Sat  Mar 28  																			8am 																			 to 5pm<br><a href="https://gsalr.com/hilltop-church-rummage-sale-mount-holly-springs-pa-38670615.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_3' onchange="toggleSaleSelection('sale_3', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_9bf0ce9f1f15f6c849bb1ff64928cd18.setContent(html_5aba82cd7f296337942f10b9fd40c757);
             
         
 
-        marker_8cd3dc0f9ad8597cf821499d0e922b0d.bindPopup(popup_13171faabd3c1a7456f958a00ee8c55d)
+        marker_1d9707b5428ab173cf3db1d07f7f076a.bindPopup(popup_9bf0ce9f1f15f6c849bb1ff64928cd18)
         ;
 
         
     
     
-                marker_8cd3dc0f9ad8597cf821499d0e922b0d.setIcon(icon_a38e4d3fa50a4500c2713166d6862076);
+                marker_1d9707b5428ab173cf3db1d07f7f076a.setIcon(icon_dc11e9071a0135017262906b0cfa51d5);
             
     
-            var marker_27cd8d9805e04761bc789d8c73691b7e = L.marker(
+            var marker_af3d2efedf302ea4dd2fd69c9aa1b2b0 = L.marker(
                 [39.9775758, -76.731846],
                 {
 }
-            ).addTo(map_f51088b9a687c54ef8537c71ef8ecc71);
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
         
     
-            var icon_3be70c56af402065aaac0388f011cd2a = L.AwesomeMarkers.icon(
+            var icon_44a288d08b6514e49fea7b36d07e134c = L.AwesomeMarkers.icon(
                 {
   "markerColor": "darkblue",
   "iconColor": "white",
@@ -418,34 +909,34 @@
             );
         
     
-        var popup_547c9f5e428a9f393c4191a01ba89a80 = L.popup({
+        var popup_afe9e4f3a7026dbfbc6d806e25ccb837 = L.popup({
   "maxWidth": 300,
 });
 
         
             
-                var html_7c974d1647ff17ec03a4a664ab4147c9 = $(`<div id="html_7c974d1647ff17ec03a4a664ab4147c9" style="width: 100.0%; height: 100.0%;"><b>Yard Sale In The Warehouse</b><br>25 Laurel St. York, Pa. March 26-29. 7:00 til 4:00. Big green building, you can’t miss. Parking along guard rail coming down Locust Street or in big parking lot in front of building. This was an active wood working shop. Most items have sawdust on them. Lots of quality, wood, molding, beams, plywood, cabinets, doors, large screen, doors, wood carts, wood racks, racks, saw horses, artwork, furniture, tables, some house of goods, and a lot more. Everything in this place has there for a long time. Review pictures.<br><br><a href="geo:0,0?q=25%2C+Laurel+Street%2C+North+York%2C+York+County%2C+Pennsylvania%2C+17404%2C+United+States" target="_blank" style="color:#4da3ff; font-weight:bold;">25, Laurel Street, North York, York County, Pennsylvania, 17404, United States</a><br><a href="https://www.google.com/maps/search/?api=1&query=25%2C+Laurel+Street%2C+North+York%2C+York+County%2C+Pennsylvania%2C+17404%2C+United+States" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Thu  Mar 26  																			7am 																			 to 4pm																		    Fri  Mar 27  																			7am 																			 to 4pm																		    Sat  Mar 28  																			7am 																			 to 4pm																		    Sun  Mar 29  																			7am 																			 to 3pm<br><a href="https://gsalr.com/yard-sale-in-the-york-pa-38670635.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br></div>`)[0];
-                popup_547c9f5e428a9f393c4191a01ba89a80.setContent(html_7c974d1647ff17ec03a4a664ab4147c9);
+                var html_37fdbd5c105b1f462ca9b7f10adf2a70 = $(`<div id="html_37fdbd5c105b1f462ca9b7f10adf2a70" style="width: 100.0%; height: 100.0%;"><b>Yard Sale In The Warehouse</b><br>25 Laurel St. York, Pa. March 26-29. 7:00 til 4:00. Big green building, you can’t miss. Parking along guard rail coming down Locust Street or in big parking lot in front of building. This was an active wood working shop. Most items have sawdust on them. Lots of quality, wood, molding, beams, plywood, cabinets, doors, large screen, doors, wood carts, wood racks, racks, saw horses, artwork, furniture, tables, some house of goods, and a lot more. Everything in this place has there for a long time. Review pictures.<br><br><a href="geo:0,0?q=25%2C+Laurel+Street%2C+North+York%2C+York+County%2C+Pennsylvania%2C+17404%2C+United+States" target="_blank" style="color:#4da3ff; font-weight:bold;">25, Laurel Street, North York, York County, Pennsylvania, 17404, United States</a><br><a href="https://www.google.com/maps/search/?api=1&query=25%2C+Laurel+Street%2C+North+York%2C+York+County%2C+Pennsylvania%2C+17404%2C+United+States" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Thu  Mar 26  																			7am 																			 to 4pm																		    Fri  Mar 27  																			7am 																			 to 4pm																		    Sat  Mar 28  																			7am 																			 to 4pm																		    Sun  Mar 29  																			7am 																			 to 3pm<br><a href="https://gsalr.com/yard-sale-in-the-york-pa-38670635.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_4' onchange="toggleSaleSelection('sale_4', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_afe9e4f3a7026dbfbc6d806e25ccb837.setContent(html_37fdbd5c105b1f462ca9b7f10adf2a70);
             
         
 
-        marker_27cd8d9805e04761bc789d8c73691b7e.bindPopup(popup_547c9f5e428a9f393c4191a01ba89a80)
+        marker_af3d2efedf302ea4dd2fd69c9aa1b2b0.bindPopup(popup_afe9e4f3a7026dbfbc6d806e25ccb837)
         ;
 
         
     
     
-                marker_27cd8d9805e04761bc789d8c73691b7e.setIcon(icon_3be70c56af402065aaac0388f011cd2a);
+                marker_af3d2efedf302ea4dd2fd69c9aa1b2b0.setIcon(icon_44a288d08b6514e49fea7b36d07e134c);
             
     
-            var marker_ebefd2ea1a99a03248abb382c23d2763 = L.marker(
+            var marker_aff35a4233176498c9cf54a970de938a = L.marker(
                 [39.9679387, -76.729179],
                 {
 }
-            ).addTo(map_f51088b9a687c54ef8537c71ef8ecc71);
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
         
     
-            var icon_7d9a0abb16345ee8e7a62b9e9e0cc351 = L.AwesomeMarkers.icon(
+            var icon_daf94ac550b26445e6b7bba0c6505b20 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "darkblue",
   "iconColor": "white",
@@ -456,34 +947,34 @@
             );
         
     
-        var popup_f60253f343864d0fd412c69e4c240302 = L.popup({
+        var popup_426d27c87e040c9a77d63302f092fe2d = L.popup({
   "maxWidth": 300,
 });
 
         
             
-                var html_81ab4fca5526bb0bfe37ab8137295cf8 = $(`<div id="html_81ab4fca5526bb0bfe37ab8137295cf8" style="width: 100.0%; height: 100.0%;"><b>SPRING CLEANING YORK REVOLUTION YARDSALE</b><br>The York Revolution Clubhouse is hosting a Community Yardsale on March 28th & 29th from 8am-3pm.  There will be: - 15+ Community Vendors - Game Memorabilia - $5 Tours of our Player Clubhouse - Game Worn/Retired Jerseys - And more!<br><br><a href="geo:0,0?q=5%2C+Brooks+Robinson+Way%2C+York+Historic+District%2C+York%2C+York+County%2C+Pennsylvania%2C+17401%2C+United+States" target="_blank" style="color:#4da3ff; font-weight:bold;">5, Brooks Robinson Way, York Historic District, York, York County, Pennsylvania, 17401, United States</a><br><a href="https://www.google.com/maps/search/?api=1&query=5%2C+Brooks+Robinson+Way%2C+York+Historic+District%2C+York%2C+York+County%2C+Pennsylvania%2C+17401%2C+United+States" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat  Mar 28  																			8am 																			 to 3pm																		    Sun  Mar 29  																			8am 																			 to 3pm<br><a href="https://gsalr.com/spring-cleaning-york-revolution-york-pa-38677017.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br></div>`)[0];
-                popup_f60253f343864d0fd412c69e4c240302.setContent(html_81ab4fca5526bb0bfe37ab8137295cf8);
+                var html_92176fc892d318e8698e58b87e54f7f2 = $(`<div id="html_92176fc892d318e8698e58b87e54f7f2" style="width: 100.0%; height: 100.0%;"><b>SPRING CLEANING YORK REVOLUTION YARDSALE</b><br>The York Revolution Clubhouse is hosting a Community Yardsale on March 28th & 29th from 8am-3pm.  There will be: - 15+ Community Vendors - Game Memorabilia - $5 Tours of our Player Clubhouse - Game Worn/Retired Jerseys - And more!<br><br><a href="geo:0,0?q=5%2C+Brooks+Robinson+Way%2C+York+Historic+District%2C+York%2C+York+County%2C+Pennsylvania%2C+17401%2C+United+States" target="_blank" style="color:#4da3ff; font-weight:bold;">5, Brooks Robinson Way, York Historic District, York, York County, Pennsylvania, 17401, United States</a><br><a href="https://www.google.com/maps/search/?api=1&query=5%2C+Brooks+Robinson+Way%2C+York+Historic+District%2C+York%2C+York+County%2C+Pennsylvania%2C+17401%2C+United+States" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat  Mar 28  																			8am 																			 to 3pm																		    Sun  Mar 29  																			8am 																			 to 3pm<br><a href="https://gsalr.com/spring-cleaning-york-revolution-york-pa-38677017.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_5' onchange="toggleSaleSelection('sale_5', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_426d27c87e040c9a77d63302f092fe2d.setContent(html_92176fc892d318e8698e58b87e54f7f2);
             
         
 
-        marker_ebefd2ea1a99a03248abb382c23d2763.bindPopup(popup_f60253f343864d0fd412c69e4c240302)
+        marker_aff35a4233176498c9cf54a970de938a.bindPopup(popup_426d27c87e040c9a77d63302f092fe2d)
         ;
 
         
     
     
-                marker_ebefd2ea1a99a03248abb382c23d2763.setIcon(icon_7d9a0abb16345ee8e7a62b9e9e0cc351);
+                marker_aff35a4233176498c9cf54a970de938a.setIcon(icon_daf94ac550b26445e6b7bba0c6505b20);
             
     
-            var marker_aee028e22666331e976bb12ec6330248 = L.marker(
+            var marker_1567b0594e7a3759a2fe5f2d0900d5d5 = L.marker(
                 [40.3614, -76.399834],
                 {
 }
-            ).addTo(map_f51088b9a687c54ef8537c71ef8ecc71);
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
         
     
-            var icon_111dbd9180b0ed3873bb0e6aaab2f412 = L.AwesomeMarkers.icon(
+            var icon_9fe4c10c99a92d50c9e4bc73a366ee69 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "darkblue",
   "iconColor": "white",
@@ -494,34 +985,34 @@
             );
         
     
-        var popup_aedb4d7846e66deebf6010e424ae69c9 = L.popup({
+        var popup_02a2dc22de5fc01d45f0a6ad93ce7a49 = L.popup({
   "maxWidth": 300,
 });
 
         
             
-                var html_8e538b2aa2a963babd3062c516e0e42b = $(`<div id="html_8e538b2aa2a963babd3062c516e0e42b" style="width: 100.0%; height: 100.0%;"><b>Garage/moving sale</b><br>MechanicTools, lawn tools, outdoor Christmas decorations, odds and ends. Everything must go, so bring your dollars and most offers will be accepted.<br><br><a href="geo:0,0?q=901%2C+Lantern+Drive%2C+Weavertown%2C+North+Lebanon+Township%2C+Lebanon+County%2C+Pennsylvania%2C+17046%2C+United+States" target="_blank" style="color:#4da3ff; font-weight:bold;">901, Lantern Drive, Weavertown, North Lebanon Township, Lebanon County, Pennsylvania, 17046, United States</a><br><a href="https://www.google.com/maps/search/?api=1&query=901%2C+Lantern+Drive%2C+Weavertown%2C+North+Lebanon+Township%2C+Lebanon+County%2C+Pennsylvania%2C+17046%2C+United+States" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat  Mar 28  																			8am 																			 to 3pm																		    Sun  Mar 29  																			8am 																			 to 3pm<br><a href="https://gsalr.com/garagemoving-sale-lebanon-pa-38676013.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br></div>`)[0];
-                popup_aedb4d7846e66deebf6010e424ae69c9.setContent(html_8e538b2aa2a963babd3062c516e0e42b);
+                var html_b1047659ff2a160a7aa4aa30ef9c4ab9 = $(`<div id="html_b1047659ff2a160a7aa4aa30ef9c4ab9" style="width: 100.0%; height: 100.0%;"><b>Garage/moving sale</b><br>MechanicTools, lawn tools, outdoor Christmas decorations, odds and ends. Everything must go, so bring your dollars and most offers will be accepted.<br><br><a href="geo:0,0?q=901%2C+Lantern+Drive%2C+Weavertown%2C+North+Lebanon+Township%2C+Lebanon+County%2C+Pennsylvania%2C+17046%2C+United+States" target="_blank" style="color:#4da3ff; font-weight:bold;">901, Lantern Drive, Weavertown, North Lebanon Township, Lebanon County, Pennsylvania, 17046, United States</a><br><a href="https://www.google.com/maps/search/?api=1&query=901%2C+Lantern+Drive%2C+Weavertown%2C+North+Lebanon+Township%2C+Lebanon+County%2C+Pennsylvania%2C+17046%2C+United+States" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat  Mar 28  																			8am 																			 to 3pm																		    Sun  Mar 29  																			8am 																			 to 3pm<br><a href="https://gsalr.com/garagemoving-sale-lebanon-pa-38676013.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_6' onchange="toggleSaleSelection('sale_6', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_02a2dc22de5fc01d45f0a6ad93ce7a49.setContent(html_b1047659ff2a160a7aa4aa30ef9c4ab9);
             
         
 
-        marker_aee028e22666331e976bb12ec6330248.bindPopup(popup_aedb4d7846e66deebf6010e424ae69c9)
+        marker_1567b0594e7a3759a2fe5f2d0900d5d5.bindPopup(popup_02a2dc22de5fc01d45f0a6ad93ce7a49)
         ;
 
         
     
     
-                marker_aee028e22666331e976bb12ec6330248.setIcon(icon_111dbd9180b0ed3873bb0e6aaab2f412);
+                marker_1567b0594e7a3759a2fe5f2d0900d5d5.setIcon(icon_9fe4c10c99a92d50c9e4bc73a366ee69);
             
     
-            var marker_81f18b7ff23b429cda0fb92b8263d21c = L.marker(
+            var marker_c1f10c4c6996ede7679c1bb4cd1b73b7 = L.marker(
                 [40.2981916, -77.0074565],
                 {
 }
-            ).addTo(map_f51088b9a687c54ef8537c71ef8ecc71);
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
         
     
-            var icon_d1acd7bf1af719573e3c7f570305f88e = L.AwesomeMarkers.icon(
+            var icon_695ef28d5159bbb85043f711ac2b7058 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "darkblue",
   "iconColor": "white",
@@ -532,34 +1023,34 @@
             );
         
     
-        var popup_13b6f829c85bf8458f143ef688b2f1b1 = L.popup({
+        var popup_1dfcaf8bc0896a8d1b0baba4aaa800d1 = L.popup({
   "maxWidth": 300,
 });
 
         
             
-                var html_578ad99b3b3e362bd0e6cd2078ce77f7 = $(`<div id="html_578ad99b3b3e362bd0e6cd2078ce77f7" style="width: 100.0%; height: 100.0%;"><b>Enola pickers estate sale - garage & moving sales - yard estate sale - craigslist</b><br>⚒️ENOLA PA PICKERS SALE⚒️ Saturday 3/28 (8am - 2pm) ✨️2390 Wertz Ln, Enola, PA 17025 MAKE A PILE &amp; SMILE @ OUR AMAZING DEALS! We'll be in ENOLA PA this Saturday for a good ol' fashioned Pickers...<br><br><a href="geo:0,0?q=2390+Wertz+Ln%2C+Enola%2C+PA+17025%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">2390 Wertz Ln, Enola, PA 17025, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=2390+Wertz+Ln%2C+Enola%2C+PA+17025%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>saturday 2026-03-28<br>8am<br><a href="https://harrisburg.craigslist.org/gms/d/summerdale-enola-pickers-estate-sale/7923475823.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br></div>`)[0];
-                popup_13b6f829c85bf8458f143ef688b2f1b1.setContent(html_578ad99b3b3e362bd0e6cd2078ce77f7);
+                var html_3f2b6cb85acfd987134b5e5f2f4f5ab2 = $(`<div id="html_3f2b6cb85acfd987134b5e5f2f4f5ab2" style="width: 100.0%; height: 100.0%;"><b>Enola pickers estate sale - garage & moving sales - yard estate sale - craigslist</b><br>⚒️ENOLA PA PICKERS SALE⚒️ Saturday 3/28 (8am - 2pm) ✨️2390 Wertz Ln, Enola, PA 17025 MAKE A PILE &amp; SMILE @ OUR AMAZING DEALS! We'll be in ENOLA PA this Saturday for a good ol' fashioned Pickers...<br><br><a href="geo:0,0?q=2390+Wertz+Ln%2C+Enola%2C+PA+17025%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">2390 Wertz Ln, Enola, PA 17025, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=2390+Wertz+Ln%2C+Enola%2C+PA+17025%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>saturday 2026-03-28<br>8am<br><a href="https://harrisburg.craigslist.org/gms/d/summerdale-enola-pickers-estate-sale/7923475823.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_7' onchange="toggleSaleSelection('sale_7', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_1dfcaf8bc0896a8d1b0baba4aaa800d1.setContent(html_3f2b6cb85acfd987134b5e5f2f4f5ab2);
             
         
 
-        marker_81f18b7ff23b429cda0fb92b8263d21c.bindPopup(popup_13b6f829c85bf8458f143ef688b2f1b1)
+        marker_c1f10c4c6996ede7679c1bb4cd1b73b7.bindPopup(popup_1dfcaf8bc0896a8d1b0baba4aaa800d1)
         ;
 
         
     
     
-                marker_81f18b7ff23b429cda0fb92b8263d21c.setIcon(icon_d1acd7bf1af719573e3c7f570305f88e);
+                marker_c1f10c4c6996ede7679c1bb4cd1b73b7.setIcon(icon_695ef28d5159bbb85043f711ac2b7058);
             
     
-            var marker_bb0045025f62e3c8c749536e73dcc14b = L.marker(
+            var marker_2c395c837158fc0be275b90252a43a30 = L.marker(
                 [40.2685001, -76.8621678],
                 {
 }
-            ).addTo(map_f51088b9a687c54ef8537c71ef8ecc71);
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
         
     
-            var icon_1930cb9da1dcf00dcc3e0d57e1c2cf9e = L.AwesomeMarkers.icon(
+            var icon_f03a8f1dc1317496702d6ddb650491a8 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "darkblue",
   "iconColor": "white",
@@ -570,34 +1061,34 @@
             );
         
     
-        var popup_0dc0f1bd132fa1a4aecd2892b1d4757a = L.popup({
+        var popup_59b93064551e412e76315f1ce485aeca = L.popup({
   "maxWidth": 300,
 });
 
         
             
-                var html_57403837a59987d3fd4face921f41cce = $(`<div id="html_57403837a59987d3fd4face921f41cce" style="width: 100.0%; height: 100.0%;"><b>Large estate sale - garage & moving sales - yard estate sale - craigslist</b><br>Huge estate sale this Friday, March 27 and Saturday, March 28 8 to 2 both days. Lots of kitchen items, cooking related items, decorative items, modern furniture, three fur coats. 2005 Mercedes suv...<br><br><a href="geo:0,0?q=Ethel+Street%2C+Mount+Pleasant%2C+Allison+Hill%2C+Harrisburg%2C+Dauphin+County%2C+Pennsylvania%2C+17103%2C+United+States" target="_blank" style="color:#4da3ff; font-weight:bold;">Ethel Street, Mount Pleasant, Allison Hill, Harrisburg, Dauphin County, Pennsylvania, 17103, United States</a><br><a href="https://www.google.com/maps/search/?api=1&query=Ethel+Street%2C+Mount+Pleasant%2C+Allison+Hill%2C+Harrisburg%2C+Dauphin+County%2C+Pennsylvania%2C+17103%2C+United+States" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>friday 2026-03-27<br>saturday 2026-03-28<br>8 am<br><a href="https://harrisburg.craigslist.org/gms/d/harrisburg-large-estate-sale/7923450696.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br></div>`)[0];
-                popup_0dc0f1bd132fa1a4aecd2892b1d4757a.setContent(html_57403837a59987d3fd4face921f41cce);
+                var html_f15e0f9b0f39283e59a795b4d22c74ed = $(`<div id="html_f15e0f9b0f39283e59a795b4d22c74ed" style="width: 100.0%; height: 100.0%;"><b>Large estate sale - garage & moving sales - yard estate sale - craigslist</b><br>Huge estate sale this Friday, March 27 and Saturday, March 28 8 to 2 both days. Lots of kitchen items, cooking related items, decorative items, modern furniture, three fur coats. 2005 Mercedes suv...<br><br><a href="geo:0,0?q=Ethel+Street%2C+Mount+Pleasant%2C+Allison+Hill%2C+Harrisburg%2C+Dauphin+County%2C+Pennsylvania%2C+17103%2C+United+States" target="_blank" style="color:#4da3ff; font-weight:bold;">Ethel Street, Mount Pleasant, Allison Hill, Harrisburg, Dauphin County, Pennsylvania, 17103, United States</a><br><a href="https://www.google.com/maps/search/?api=1&query=Ethel+Street%2C+Mount+Pleasant%2C+Allison+Hill%2C+Harrisburg%2C+Dauphin+County%2C+Pennsylvania%2C+17103%2C+United+States" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>friday 2026-03-27<br>saturday 2026-03-28<br>8 am<br><a href="https://harrisburg.craigslist.org/gms/d/harrisburg-large-estate-sale/7923450696.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_8' onchange="toggleSaleSelection('sale_8', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_59b93064551e412e76315f1ce485aeca.setContent(html_f15e0f9b0f39283e59a795b4d22c74ed);
             
         
 
-        marker_bb0045025f62e3c8c749536e73dcc14b.bindPopup(popup_0dc0f1bd132fa1a4aecd2892b1d4757a)
+        marker_2c395c837158fc0be275b90252a43a30.bindPopup(popup_59b93064551e412e76315f1ce485aeca)
         ;
 
         
     
     
-                marker_bb0045025f62e3c8c749536e73dcc14b.setIcon(icon_1930cb9da1dcf00dcc3e0d57e1c2cf9e);
+                marker_2c395c837158fc0be275b90252a43a30.setIcon(icon_f03a8f1dc1317496702d6ddb650491a8);
             
     
-            var marker_a84a6725df8fe04b29d8e86adf202449 = L.marker(
+            var marker_54bf60857a1b3dcdadbb11fc30f4394b = L.marker(
                 [40.2760675, -76.8358185],
                 {
 }
-            ).addTo(map_f51088b9a687c54ef8537c71ef8ecc71);
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
         
     
-            var icon_04babe0e825820fd58269284e332b673 = L.AwesomeMarkers.icon(
+            var icon_fa94cd46e8dfc8e9447a332b98fbda4e = L.AwesomeMarkers.icon(
                 {
   "markerColor": "darkblue",
   "iconColor": "white",
@@ -608,34 +1099,34 @@
             );
         
     
-        var popup_014c7b0b2ae4e604d6b08cd601c576d2 = L.popup({
+        var popup_199812c9d0a5e5670598e89228e6dc72 = L.popup({
   "maxWidth": 300,
 });
 
         
             
-                var html_57f29aa01f856994b4c3c284304c923d = $(`<div id="html_57f29aa01f856994b4c3c284304c923d" style="width: 100.0%; height: 100.0%;"><b>Yard sale Sat 8:00 till 2:00 - garage & moving sales - yard estate sale - craigslist</b><br>28 inch Samsung tv. Large trash cans. Pool noodles. Lots of kitchen utensils Electric knife. Lots of ladies purses. Ladies boots. Christmas items. Ladies clothing many new. 2 new homemade afghans....<br><br><a href="geo:0,0?q=Altavista+Ave%2C+Lower+Paxton+Township%2C+PA+17109%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">Altavista Ave, Lower Paxton Township, PA 17109, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=Altavista+Ave%2C+Lower+Paxton+Township%2C+PA+17109%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>saturday 2026-03-28<br>8:00<br><a href="https://harrisburg.craigslist.org/gms/d/harrisburg-yard-sale-sat-800-till-200/7923287654.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br></div>`)[0];
-                popup_014c7b0b2ae4e604d6b08cd601c576d2.setContent(html_57f29aa01f856994b4c3c284304c923d);
+                var html_4731fdd668d08aa4af99ce06f2410a52 = $(`<div id="html_4731fdd668d08aa4af99ce06f2410a52" style="width: 100.0%; height: 100.0%;"><b>Yard sale Sat 8:00 till 2:00 - garage & moving sales - yard estate sale - craigslist</b><br>28 inch Samsung tv. Large trash cans. Pool noodles. Lots of kitchen utensils Electric knife. Lots of ladies purses. Ladies boots. Christmas items. Ladies clothing many new. 2 new homemade afghans....<br><br><a href="geo:0,0?q=Altavista+Ave%2C+Lower+Paxton+Township%2C+PA+17109%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">Altavista Ave, Lower Paxton Township, PA 17109, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=Altavista+Ave%2C+Lower+Paxton+Township%2C+PA+17109%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>saturday 2026-03-28<br>8:00<br><a href="https://harrisburg.craigslist.org/gms/d/harrisburg-yard-sale-sat-800-till-200/7923287654.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_9' onchange="toggleSaleSelection('sale_9', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_199812c9d0a5e5670598e89228e6dc72.setContent(html_4731fdd668d08aa4af99ce06f2410a52);
             
         
 
-        marker_a84a6725df8fe04b29d8e86adf202449.bindPopup(popup_014c7b0b2ae4e604d6b08cd601c576d2)
+        marker_54bf60857a1b3dcdadbb11fc30f4394b.bindPopup(popup_199812c9d0a5e5670598e89228e6dc72)
         ;
 
         
     
     
-                marker_a84a6725df8fe04b29d8e86adf202449.setIcon(icon_04babe0e825820fd58269284e332b673);
+                marker_54bf60857a1b3dcdadbb11fc30f4394b.setIcon(icon_fa94cd46e8dfc8e9447a332b98fbda4e);
             
     
-            var marker_c60ad71e850dba812e6005f24603e72b = L.marker(
+            var marker_132653563644c164712fd3e0c3328b5d = L.marker(
                 [40.2991946, -76.8146159],
                 {
 }
-            ).addTo(map_f51088b9a687c54ef8537c71ef8ecc71);
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
         
     
-            var icon_09579e125a747ccbbf3613aff4c7efb3 = L.AwesomeMarkers.icon(
+            var icon_de69c956a8732891c07f66aab78be9b7 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "darkblue",
   "iconColor": "white",
@@ -646,34 +1137,34 @@
             );
         
     
-        var popup_fcaed433c9f767207435762907275a2c = L.popup({
+        var popup_ce8244e4b96b1beca4c30fc378d7761e = L.popup({
   "maxWidth": 300,
 });
 
         
             
-                var html_a1e9965216cdcbb7752c4af85278ded3 = $(`<div id="html_a1e9965216cdcbb7752c4af85278ded3" style="width: 100.0%; height: 100.0%;"><b>Estate sale furniture and household items - garage & moving sales - yard estate sale - craigslist</b><br>Serious inquires only please. Pickup in Harrisburg near the colonial park mall. Pickup is available most days after 4pm and most any time on the weekends. Vintage pineapple floor lamp - $100 Vintage...<br><br><a href="geo:0,0?q=Miller+Rd%2C+Colonial+Park%2C+PA+17109%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">Miller Rd, Colonial Park, PA 17109, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=Miller+Rd%2C+Colonial+Park%2C+PA+17109%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>wednesday 2026-03-25<br>saturday 2026-03-28<br>saturday 2026-04-04<br>8am<br><a href="https://harrisburg.craigslist.org/gms/d/harrisburg-estate-sale-furniture-and/7922908185.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br></div>`)[0];
-                popup_fcaed433c9f767207435762907275a2c.setContent(html_a1e9965216cdcbb7752c4af85278ded3);
+                var html_b6b179f9fff4b71a7b7caffaf3dae2e2 = $(`<div id="html_b6b179f9fff4b71a7b7caffaf3dae2e2" style="width: 100.0%; height: 100.0%;"><b>Estate sale furniture and household items - garage & moving sales - yard estate sale - craigslist</b><br>Serious inquires only please. Pickup in Harrisburg near the colonial park mall. Pickup is available most days after 4pm and most any time on the weekends. Vintage pineapple floor lamp - $100 Vintage...<br><br><a href="geo:0,0?q=Miller+Rd%2C+Colonial+Park%2C+PA+17109%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">Miller Rd, Colonial Park, PA 17109, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=Miller+Rd%2C+Colonial+Park%2C+PA+17109%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>wednesday 2026-03-25<br>saturday 2026-03-28<br>saturday 2026-04-04<br>8am<br><a href="https://harrisburg.craigslist.org/gms/d/harrisburg-estate-sale-furniture-and/7922908185.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_10' onchange="toggleSaleSelection('sale_10', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_ce8244e4b96b1beca4c30fc378d7761e.setContent(html_b6b179f9fff4b71a7b7caffaf3dae2e2);
             
         
 
-        marker_c60ad71e850dba812e6005f24603e72b.bindPopup(popup_fcaed433c9f767207435762907275a2c)
+        marker_132653563644c164712fd3e0c3328b5d.bindPopup(popup_ce8244e4b96b1beca4c30fc378d7761e)
         ;
 
         
     
     
-                marker_c60ad71e850dba812e6005f24603e72b.setIcon(icon_09579e125a747ccbbf3613aff4c7efb3);
+                marker_132653563644c164712fd3e0c3328b5d.setIcon(icon_de69c956a8732891c07f66aab78be9b7);
             
     
-            var marker_dd88289c9271454761c8d302e4a695b7 = L.marker(
+            var marker_ff3e6e69ac0f15cde5251ef20402e595 = L.marker(
                 [40.2991946, -76.8146159],
                 {
 }
-            ).addTo(map_f51088b9a687c54ef8537c71ef8ecc71);
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
         
     
-            var icon_1a0681350d314bc71397cd7ffe6ff3c4 = L.AwesomeMarkers.icon(
+            var icon_aea753a8233576c6391867728c2da9f0 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "darkblue",
   "iconColor": "white",
@@ -684,34 +1175,34 @@
             );
         
     
-        var popup_61ee13c7cb0ca462409c7be2197d2e1a = L.popup({
+        var popup_e2a718fb406bdaf47e72106d9f5de9b1 = L.popup({
   "maxWidth": 300,
 });
 
         
             
-                var html_67374500784fd5c3f66eac142d7127ec = $(`<div id="html_67374500784fd5c3f66eac142d7127ec" style="width: 100.0%; height: 100.0%;"><b>Even more estate sale items various furniture and household items - garage & moving sales - yard estate sale -...</b><br>Serious inquires only please. Pickup in Harrisburg near the colonial park mall. Pickup is available most days after 4pm and most any time on the weekends. Student desk - $50 Vintage student desk....<br><br><a href="geo:0,0?q=Miller+Rd%2C+Colonial+Park%2C+PA+17109%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">Miller Rd, Colonial Park, PA 17109, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=Miller+Rd%2C+Colonial+Park%2C+PA+17109%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>wednesday 2026-03-25<br>saturday 2026-03-28<br>7am<br><a href="https://harrisburg.craigslist.org/gms/d/harrisburg-even-more-estate-sale-items/7921904261.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br></div>`)[0];
-                popup_61ee13c7cb0ca462409c7be2197d2e1a.setContent(html_67374500784fd5c3f66eac142d7127ec);
+                var html_ef139c49514e90d31aaa44a4bfaf8fe3 = $(`<div id="html_ef139c49514e90d31aaa44a4bfaf8fe3" style="width: 100.0%; height: 100.0%;"><b>Even more estate sale items various furniture and household items - garage & moving sales - yard estate sale -...</b><br>Serious inquires only please. Pickup in Harrisburg near the colonial park mall. Pickup is available most days after 4pm and most any time on the weekends. Student desk - $50 Vintage student desk....<br><br><a href="geo:0,0?q=Miller+Rd%2C+Colonial+Park%2C+PA+17109%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">Miller Rd, Colonial Park, PA 17109, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=Miller+Rd%2C+Colonial+Park%2C+PA+17109%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>wednesday 2026-03-25<br>saturday 2026-03-28<br>7am<br><a href="https://harrisburg.craigslist.org/gms/d/harrisburg-even-more-estate-sale-items/7921904261.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_11' onchange="toggleSaleSelection('sale_11', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_e2a718fb406bdaf47e72106d9f5de9b1.setContent(html_ef139c49514e90d31aaa44a4bfaf8fe3);
             
         
 
-        marker_dd88289c9271454761c8d302e4a695b7.bindPopup(popup_61ee13c7cb0ca462409c7be2197d2e1a)
+        marker_ff3e6e69ac0f15cde5251ef20402e595.bindPopup(popup_e2a718fb406bdaf47e72106d9f5de9b1)
         ;
 
         
     
     
-                marker_dd88289c9271454761c8d302e4a695b7.setIcon(icon_1a0681350d314bc71397cd7ffe6ff3c4);
+                marker_ff3e6e69ac0f15cde5251ef20402e595.setIcon(icon_aea753a8233576c6391867728c2da9f0);
             
     
-            var marker_67a2ecd5f79caf99caabd0990f77c44b = L.marker(
+            var marker_08c775ec9282a88dcaa5a1f41718bb3c = L.marker(
                 [40.2991946, -76.8146159],
                 {
 }
-            ).addTo(map_f51088b9a687c54ef8537c71ef8ecc71);
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
         
     
-            var icon_ac2e87f682074fd199e90815e58028af = L.AwesomeMarkers.icon(
+            var icon_fc73436f5e5cef30f86dadc6b8d2ff55 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "darkblue",
   "iconColor": "white",
@@ -722,24 +1213,898 @@
             );
         
     
-        var popup_3448152ea2f8ee0ebbc27b0818610f3d = L.popup({
+        var popup_8f6042b3d20b65e38d6c72d28b9e4c5d = L.popup({
   "maxWidth": 300,
 });
 
         
             
-                var html_44c41bc8c515bb51fb13be5eedd7ca32 = $(`<div id="html_44c41bc8c515bb51fb13be5eedd7ca32" style="width: 100.0%; height: 100.0%;"><b>More estate sale items various furniture and household items - garage & moving sales - yard estate sale - craigslist</b><br>Serious inquires only please. Pickup in Harrisburg near the colonial park mall. Pickup is available most days after 4pm and most any time on the weekends. Keg Fridge - Vintage Admiral (1950’s) $150...<br><br><a href="geo:0,0?q=Miller+Rd%2C+Colonial+Park%2C+PA+17109%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">Miller Rd, Colonial Park, PA 17109, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=Miller+Rd%2C+Colonial+Park%2C+PA+17109%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>saturday 2026-03-28<br>7am<br><a href="https://harrisburg.craigslist.org/gms/d/harrisburg-more-estate-sale-items/7921507105.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br></div>`)[0];
-                popup_3448152ea2f8ee0ebbc27b0818610f3d.setContent(html_44c41bc8c515bb51fb13be5eedd7ca32);
+                var html_fe0d5924ff9ccb90c2c7dcb4b4e8a8c9 = $(`<div id="html_fe0d5924ff9ccb90c2c7dcb4b4e8a8c9" style="width: 100.0%; height: 100.0%;"><b>More estate sale items various furniture and household items - garage & moving sales - yard estate sale - craigslist</b><br>Serious inquires only please. Pickup in Harrisburg near the colonial park mall. Pickup is available most days after 4pm and most any time on the weekends. Keg Fridge - Vintage Admiral (1950’s) $150...<br><br><a href="geo:0,0?q=Miller+Rd%2C+Colonial+Park%2C+PA+17109%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">Miller Rd, Colonial Park, PA 17109, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=Miller+Rd%2C+Colonial+Park%2C+PA+17109%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>saturday 2026-03-28<br>7am<br><a href="https://harrisburg.craigslist.org/gms/d/harrisburg-more-estate-sale-items/7921507105.html" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_12' onchange="toggleSaleSelection('sale_12', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_8f6042b3d20b65e38d6c72d28b9e4c5d.setContent(html_fe0d5924ff9ccb90c2c7dcb4b4e8a8c9);
             
         
 
-        marker_67a2ecd5f79caf99caabd0990f77c44b.bindPopup(popup_3448152ea2f8ee0ebbc27b0818610f3d)
+        marker_08c775ec9282a88dcaa5a1f41718bb3c.bindPopup(popup_8f6042b3d20b65e38d6c72d28b9e4c5d)
         ;
 
         
     
     
-                marker_67a2ecd5f79caf99caabd0990f77c44b.setIcon(icon_ac2e87f682074fd199e90815e58028af);
+                marker_08c775ec9282a88dcaa5a1f41718bb3c.setIcon(icon_fc73436f5e5cef30f86dadc6b8d2ff55);
+            
+    
+            var marker_fdc959f8bf62d828a00b662fbbff62c6 = L.marker(
+                [40.684684, -76.8892931],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_aeb8e126e7d5ff5cc05f817a8665abe6 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_0ca18201cb6aa874c5142efc3ebb5272 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ff2bdbfeb9f4b7945975759c48556894 = $(`<div id="html_ff2bdbfeb9f4b7945975759c48556894" style="width: 100.0%; height: 100.0%;"><b>Annual Spring Consignment Sale</b><br>Public Auction: "Annual Spring Consignment Sale" by Rebecca Lauver Auctioneer. Auction will be held on Sat Mar 28 @ 08:00AM at 6130 South Susquehanna Trail in Port Trevorton, PA 17864. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=6130+S+Susquehanna+Trail%2C+Port+Trevorton%2C+PA+17864%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">6130 S Susquehanna Trail, Port Trevorton, PA 17864, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=6130+S+Susquehanna+Trail%2C+Port+Trevorton%2C+PA+17864%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 08:00AM<br><a href="https://www.auctionzip.com/Listings/4117762.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_13' onchange="toggleSaleSelection('sale_13', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_0ca18201cb6aa874c5142efc3ebb5272.setContent(html_ff2bdbfeb9f4b7945975759c48556894);
+            
+        
+
+        marker_fdc959f8bf62d828a00b662fbbff62c6.bindPopup(popup_0ca18201cb6aa874c5142efc3ebb5272)
+        ;
+
+        
+    
+    
+                marker_fdc959f8bf62d828a00b662fbbff62c6.setIcon(icon_aeb8e126e7d5ff5cc05f817a8665abe6);
+            
+    
+            var marker_cf20bd181d6f6384574afe61bc9820a3 = L.marker(
+                [40.5683016, -77.3925984],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_9e38e00fcfccc4cfa5b4d77d45cad3d4 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_b8a2b6218ea1c728fe2414bc5f16662c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4775b47f6b52462ed987c4cca252f925 = $(`<div id="html_4775b47f6b52462ed987c4cca252f925" style="width: 100.0%; height: 100.0%;"><b>Rays of Light Haven -Benefit &amp; Consignment Auction</b><br>Public Auction: "Rays of Light Haven -Benefit & Consignment Auction" by Lykens Valley Auctions. Auction will be held on Sat Mar 28 @ 08:30AM at 4655 Cedar Springs Rd. in Mifflintown, PA 17059. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=Cedar+Springs+Road%2C+Mifflintown%2C+Juniata+County%2C+Pennsylvania%2C+17059%2C+United+States" target="_blank" style="color:#4da3ff; font-weight:bold;">Cedar Springs Road, Mifflintown, Juniata County, Pennsylvania, 17059, United States</a><br><a href="https://www.google.com/maps/search/?api=1&query=Cedar+Springs+Road%2C+Mifflintown%2C+Juniata+County%2C+Pennsylvania%2C+17059%2C+United+States" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 08:30AM<br><a href="https://www.auctionzip.com/Listings/4126082.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_14' onchange="toggleSaleSelection('sale_14', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_b8a2b6218ea1c728fe2414bc5f16662c.setContent(html_4775b47f6b52462ed987c4cca252f925);
+            
+        
+
+        marker_cf20bd181d6f6384574afe61bc9820a3.bindPopup(popup_b8a2b6218ea1c728fe2414bc5f16662c)
+        ;
+
+        
+    
+    
+                marker_cf20bd181d6f6384574afe61bc9820a3.setIcon(icon_9e38e00fcfccc4cfa5b4d77d45cad3d4);
+            
+    
+            var marker_f574ab9f917758d5e58861ec42dd40be = L.marker(
+                [40.191134, -76.58979459999999],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_51a2f6194a89892fc0f721187d042ce2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2e7f1ffddf6d5fa26cb5fe603277bc6b = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_158597d16b54de8460d07eb856d43da7 = $(`<div id="html_158597d16b54de8460d07eb856d43da7" style="width: 100.0%; height: 100.0%;"><b>March Building Materials auction</b><br>Public Auction: "March Building Materials auction" by KOSER AUCTIONS. Auction will be held on Sat Mar 28 @ 08:30AM at 523 Koser Road in Elizabethtown, PA 17022. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=523+Koser+Rd%2C+Elizabethtown%2C+PA+17022%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">523 Koser Rd, Elizabethtown, PA 17022, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=523+Koser+Rd%2C+Elizabethtown%2C+PA+17022%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 08:30AM<br><a href="https://www.auctionzip.com/Listings/4125493.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_15' onchange="toggleSaleSelection('sale_15', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_2e7f1ffddf6d5fa26cb5fe603277bc6b.setContent(html_158597d16b54de8460d07eb856d43da7);
+            
+        
+
+        marker_f574ab9f917758d5e58861ec42dd40be.bindPopup(popup_2e7f1ffddf6d5fa26cb5fe603277bc6b)
+        ;
+
+        
+    
+    
+                marker_f574ab9f917758d5e58861ec42dd40be.setIcon(icon_51a2f6194a89892fc0f721187d042ce2);
+            
+    
+            var marker_f271617285cb3a10353383df65dff28e = L.marker(
+                [39.8267069, -76.7229573],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_86416ad722ec63196f0e0bae6e38df45 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_dd6b91a86fbaca71f64c2120a93c5323 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_011d8e66ddd0744fbb0cbb2e8998a7dd = $(`<div id="html_011d8e66ddd0744fbb0cbb2e8998a7dd" style="width: 100.0%; height: 100.0%;"><b>Well stocked farm Shop Antique Tractors &amp; Equipnt</b><br>Public Auction: "Well stocked farm Shop, Antique Tractors & Equipnt" by Leaman Auctions Ltd.. Auction will be held on Sat Mar 28 @ 08:30AM at 1287 West Springfield Rd., Seven Valleys in Seven Valleys, PA 17360. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=1287%2C+West+Springfield+Road%2C+Springfield+Township%2C+York+County%2C+Pennsylvania%2C+17360%2C+United+States" target="_blank" style="color:#4da3ff; font-weight:bold;">1287, West Springfield Road, Springfield Township, York County, Pennsylvania, 17360, United States</a><br><a href="https://www.google.com/maps/search/?api=1&query=1287%2C+West+Springfield+Road%2C+Springfield+Township%2C+York+County%2C+Pennsylvania%2C+17360%2C+United+States" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 08:30AM<br><a href="https://www.auctionzip.com/Listings/4105189.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_16' onchange="toggleSaleSelection('sale_16', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_dd6b91a86fbaca71f64c2120a93c5323.setContent(html_011d8e66ddd0744fbb0cbb2e8998a7dd);
+            
+        
+
+        marker_f271617285cb3a10353383df65dff28e.bindPopup(popup_dd6b91a86fbaca71f64c2120a93c5323)
+        ;
+
+        
+    
+    
+                marker_f271617285cb3a10353383df65dff28e.setIcon(icon_86416ad722ec63196f0e0bae6e38df45);
+            
+    
+            var marker_44acf02e26cf7b8e8868854bc1920a22 = L.marker(
+                [39.7324206, -77.0947721],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_435a567d851acf69474f5a8096cebed2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_a338e644e530b16d5ea372269e363db8 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_0b179accbdae5338f7c22fa088a3ff20 = $(`<div id="html_0b179accbdae5338f7c22fa088a3ff20" style="width: 100.0%; height: 100.0%;"><b>CATALOG AMERICANA ANTIQUES AUCTION</b><br>Public Auction: "CATALOG AMERICANA ANTIQUES AUCTION" by Pa OnSITE AUCTION CO.. Auction will be held on Sat Mar 28 @ 08:30AM at Eagles Pavilion Building, 427 Mengus Mill Rd. in Littlestown, PA 17340. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=427+Mengus+Mill+Rd%2C+Littlestown%2C+PA+17340%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">427 Mengus Mill Rd, Littlestown, PA 17340, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=427+Mengus+Mill+Rd%2C+Littlestown%2C+PA+17340%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 08:30AM<br><a href="https://www.auctionzip.com/Listings/4119227.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_17' onchange="toggleSaleSelection('sale_17', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_a338e644e530b16d5ea372269e363db8.setContent(html_0b179accbdae5338f7c22fa088a3ff20);
+            
+        
+
+        marker_44acf02e26cf7b8e8868854bc1920a22.bindPopup(popup_a338e644e530b16d5ea372269e363db8)
+        ;
+
+        
+    
+    
+                marker_44acf02e26cf7b8e8868854bc1920a22.setIcon(icon_435a567d851acf69474f5a8096cebed2);
+            
+    
+            var marker_c8cccc632ccddca1ec98dd6d9ee6642e = L.marker(
+                [40.03547210000001, -76.9445374],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_88e317bdc68fed62ae4b6f1755b84fc2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_bbfd326e574eeca497b1bd7122999e8b = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ca0df80f2586c5546189d1a6fb0a3b51 = $(`<div id="html_ca0df80f2586c5546189d1a6fb0a3b51" style="width: 100.0%; height: 100.0%;"><b>Kubota Tractor &amp; UTV Furniture Tools Bee Farm</b><br>Public Auction: "Kubota Tractor & UTV, Furniture, Tools, Bee, Farm" by Rentzels Auction Service INC.. Auction will be held on Sat Mar 28 @ 09:00AM at 120 N Winding Rd in Wellsville, PA 17365. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=120+N+Winding+Rd%2C+Wellsville%2C+PA+17365%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">120 N Winding Rd, Wellsville, PA 17365, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=120+N+Winding+Rd%2C+Wellsville%2C+PA+17365%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 09:00AM<br><a href="https://www.auctionzip.com/Listings/4118165.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_18' onchange="toggleSaleSelection('sale_18', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_bbfd326e574eeca497b1bd7122999e8b.setContent(html_ca0df80f2586c5546189d1a6fb0a3b51);
+            
+        
+
+        marker_c8cccc632ccddca1ec98dd6d9ee6642e.bindPopup(popup_bbfd326e574eeca497b1bd7122999e8b)
+        ;
+
+        
+    
+    
+                marker_c8cccc632ccddca1ec98dd6d9ee6642e.setIcon(icon_88e317bdc68fed62ae4b6f1755b84fc2);
+            
+    
+            var marker_261bcbcd0592170b56a98a2fc53e53e9 = L.marker(
+                [39.9702337, -76.7774385],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_59324b6c516448306ac39bee5588ac5b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_ac60b8963cffd0b442f83d474e90692d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_1261ddeb8152371b9d72f56dcb9559db = $(`<div id="html_1261ddeb8152371b9d72f56dcb9559db" style="width: 100.0%; height: 100.0%;"><b>68th BROWN TOOL ANTIQUE TOOL AUCTION</b><br>Public Auction: "68th BROWN TOOL ANTIQUE TOOL AUCTION" by Brown Tool Auctions. Auction will be held on Sat Mar 28 @ 09:00AM at 2000 Loucks Rd in York, PA 17408. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=Wyndham+Garden+York%2C+2000%2C+Loucks+Road%2C+Shiloh%2C+York%2C+York+County%2C+Pennsylvania%2C+17408%2C+United+States" target="_blank" style="color:#4da3ff; font-weight:bold;">Wyndham Garden York, 2000, Loucks Road, Shiloh, York, York County, Pennsylvania, 17408, United States</a><br><a href="https://www.google.com/maps/search/?api=1&query=Wyndham+Garden+York%2C+2000%2C+Loucks+Road%2C+Shiloh%2C+York%2C+York+County%2C+Pennsylvania%2C+17408%2C+United+States" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 09:00AM<br><a href="https://www.auctionzip.com/Listings/4121089.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_19' onchange="toggleSaleSelection('sale_19', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_ac60b8963cffd0b442f83d474e90692d.setContent(html_1261ddeb8152371b9d72f56dcb9559db);
+            
+        
+
+        marker_261bcbcd0592170b56a98a2fc53e53e9.bindPopup(popup_ac60b8963cffd0b442f83d474e90692d)
+        ;
+
+        
+    
+    
+                marker_261bcbcd0592170b56a98a2fc53e53e9.setIcon(icon_59324b6c516448306ac39bee5588ac5b);
+            
+    
+            var marker_1a1d11b9820e5eb3cec11ade636dbddb = L.marker(
+                [40.1830227, -77.3449821],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_6906070f4037bd2e5f7dabee1442f38e = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "home",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_72492780bedbd573b6a9360cfcfc483d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_5350d321f01c0e7fe489ab0ceabd11fa = $(`<div id="html_5350d321f01c0e7fe489ab0ceabd11fa" style="width: 100.0%; height: 100.0%;"><b>FARM EQUIPMENT &amp; FARM RELATED ITEMS</b><br>Public Auction: "FARM EQUIPMENT & FARM RELATED ITEMS" by Jones & Martin Auctions LLC. Auction will be held on Sat Mar 28 @ 09:00AM at 221 Crossroad School Rd. in Newville, PA 17241. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=221+Crossroad+School+Rd%2C+Newville%2C+PA+17241%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">221 Crossroad School Rd, Newville, PA 17241, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=221+Crossroad+School+Rd%2C+Newville%2C+PA+17241%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 09:00AM<br><a href="https://www.auctionzip.com/Listings/4099129.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_20' onchange="toggleSaleSelection('sale_20', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_72492780bedbd573b6a9360cfcfc483d.setContent(html_5350d321f01c0e7fe489ab0ceabd11fa);
+            
+        
+
+        marker_1a1d11b9820e5eb3cec11ade636dbddb.bindPopup(popup_72492780bedbd573b6a9360cfcfc483d)
+        ;
+
+        
+    
+    
+                marker_1a1d11b9820e5eb3cec11ade636dbddb.setIcon(icon_6906070f4037bd2e5f7dabee1442f38e);
+            
+    
+            var marker_2ab6bfecc71ae41b9076f413c4841319 = L.marker(
+                [39.8727622, -77.5435648],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_5febe8daafe49120a30118626d78fa66 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_bd3d793342a8736aeeb27c74a206a4f9 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_5dce13c96eb5d7c62cca2a239a0a5ffe = $(`<div id="html_5dce13c96eb5d7c62cca2a239a0a5ffe" style="width: 100.0%; height: 100.0%;"><b>Firearms - Coins - Collectibles - Household - Tool</b><br>Public Auction: "Firearms - Coins - Collectibles - Household - Tool" by John Mowen Auctioneering. Auction will be held on Sat Mar 28 @ 09:00AM at Pond Bank Community Center, 6492 Duffield Road in Chambersburg, PA 17202. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=9997+Duffield+Rd%2C+Chambersburg%2C+PA+17201%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">9997 Duffield Rd, Chambersburg, PA 17201, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=9997+Duffield+Rd%2C+Chambersburg%2C+PA+17201%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 09:00AM<br><a href="https://www.auctionzip.com/Listings/4118086.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_21' onchange="toggleSaleSelection('sale_21', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_bd3d793342a8736aeeb27c74a206a4f9.setContent(html_5dce13c96eb5d7c62cca2a239a0a5ffe);
+            
+        
+
+        marker_2ab6bfecc71ae41b9076f413c4841319.bindPopup(popup_bd3d793342a8736aeeb27c74a206a4f9)
+        ;
+
+        
+    
+    
+                marker_2ab6bfecc71ae41b9076f413c4841319.setIcon(icon_5febe8daafe49120a30118626d78fa66);
+            
+    
+            var marker_8529b145d528d381cd30ed9ac734d28a = L.marker(
+                [40.1262626, -77.19291419999999],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_00c8f40d68f8b76cd11641bf1e2db84d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_9d8444acd02ea28fd2dfa2634b5ab151 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6c9d00d12330ab9258b567fce6734e6d = $(`<div id="html_6c9d00d12330ab9258b567fce6734e6d" style="width: 100.0%; height: 100.0%;"><b>Real Estate-Antiques-Collectibles-Putt painting</b><br>Public Auction: "Real Estate-Antiques-Collectibles-Putt painting" by KEVIN M. WICKARD and TODD UMBRELL Auctioneering. Auction will be held on Sat Mar 28 @ 09:00AM at 8 Dogwood Drive in Mt Holly Springs, PA 17065. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=8+Dogwood+Dr%2C+Mt+Holly+Springs%2C+PA+17065%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">8 Dogwood Dr, Mt Holly Springs, PA 17065, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=8+Dogwood+Dr%2C+Mt+Holly+Springs%2C+PA+17065%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 09:00AM<br><a href="https://www.auctionzip.com/Listings/4106048.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_22' onchange="toggleSaleSelection('sale_22', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_9d8444acd02ea28fd2dfa2634b5ab151.setContent(html_6c9d00d12330ab9258b567fce6734e6d);
+            
+        
+
+        marker_8529b145d528d381cd30ed9ac734d28a.bindPopup(popup_9d8444acd02ea28fd2dfa2634b5ab151)
+        ;
+
+        
+    
+    
+                marker_8529b145d528d381cd30ed9ac734d28a.setIcon(icon_00c8f40d68f8b76cd11641bf1e2db84d);
+            
+    
+            var marker_3761440f32814e5fddb9e83381b1334b = L.marker(
+                [40.2978477, -76.4800143],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_104a48606d8dd27396b78b737e7e8a42 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_ad09febe447f2c1de86f9634149ec208 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_1f6f3bea20fcf3c780e12c60d2b5a1e0 = $(`<div id="html_1f6f3bea20fcf3c780e12c60d2b5a1e0" style="width: 100.0%; height: 100.0%;"><b>3 BR 1 BA HOUSE LG SHOP ON 1.97 AC +CONTENTS</b><br>Public Auction: "3 BR 1 BA HOUSE, LG SHOP ON 1.97 AC +CONTENTS" by Joel Heisey L&H Auctions Inc.. Auction will be held on Sat Mar 28 @ 09:00AM at 4010 Oak Street in Lebanon, PA 17042. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=4010%2C+Oak+Street%2C+South+Annville+Township%2C+Lebanon+County%2C+Pennsylvania%2C+17042%2C+United+States" target="_blank" style="color:#4da3ff; font-weight:bold;">4010, Oak Street, South Annville Township, Lebanon County, Pennsylvania, 17042, United States</a><br><a href="https://www.google.com/maps/search/?api=1&query=4010%2C+Oak+Street%2C+South+Annville+Township%2C+Lebanon+County%2C+Pennsylvania%2C+17042%2C+United+States" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 09:00AM<br><a href="https://www.auctionzip.com/Listings/4093706.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_23' onchange="toggleSaleSelection('sale_23', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_ad09febe447f2c1de86f9634149ec208.setContent(html_1f6f3bea20fcf3c780e12c60d2b5a1e0);
+            
+        
+
+        marker_3761440f32814e5fddb9e83381b1334b.bindPopup(popup_ad09febe447f2c1de86f9634149ec208)
+        ;
+
+        
+    
+    
+                marker_3761440f32814e5fddb9e83381b1334b.setIcon(icon_104a48606d8dd27396b78b737e7e8a42);
+            
+    
+            var marker_10b9906272c9de4ccd47e203198f9cde = L.marker(
+                [39.985852, -76.72829999999999],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_ea9a76595bfcfd7652390b42a89f08ed = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_acdb49a141310691239d56059811d68a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4fd4e710d68368fddb45d68bb34fc944 = $(`<div id="html_4fd4e710d68368fddb45d68bb34fc944" style="width: 100.0%; height: 100.0%;"><b>Public Coin Auction</b><br>Public Auction: "Public Coin Auction" by Frank Coleman. Auction will be held on Sat Mar 28 @ 09:00AM at Four Points by Sheraton Hotel and Suites, 1650 Toronita St in York, PA 17402. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=1650+Toronita+St%2C+York%2C+PA+17402%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">1650 Toronita St, York, PA 17402, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=1650+Toronita+St%2C+York%2C+PA+17402%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 09:00AM<br><a href="https://www.auctionzip.com/Listings/4112756.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_24' onchange="toggleSaleSelection('sale_24', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_acdb49a141310691239d56059811d68a.setContent(html_4fd4e710d68368fddb45d68bb34fc944);
+            
+        
+
+        marker_10b9906272c9de4ccd47e203198f9cde.bindPopup(popup_acdb49a141310691239d56059811d68a)
+        ;
+
+        
+    
+    
+                marker_10b9906272c9de4ccd47e203198f9cde.setIcon(icon_ea9a76595bfcfd7652390b42a89f08ed);
+            
+    
+            var marker_453962f38d80598f875db15131e165e9 = L.marker(
+                [39.81805, -77.2275242],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_b2073744db046241c10922a54f787861 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_4380b93ec2b3df8629c2e70969d6a949 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_de3eb0cf4f0ba6a95069d9d8d7e5cd5b = $(`<div id="html_de3eb0cf4f0ba6a95069d9d8d7e5cd5b" style="width: 100.0%; height: 100.0%;"><b>Milk Bottle/Dairy Collectibles Auction</b><br>Public Auction: "Milk BottleDairy Collectibles Auction" by Larry Swartz, Auctioneer. Auction will be held on Sat Mar 28 @ 09:00AM at 945 Baltimore Pike in Gettysburg, PA 17325. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=Comfort+Suites%2C+945%2C+Baltimore+Pike%2C+Gettysburg%2C+Adams+County%2C+Pennsylvania%2C+17325%2C+United+States" target="_blank" style="color:#4da3ff; font-weight:bold;">Comfort Suites, 945, Baltimore Pike, Gettysburg, Adams County, Pennsylvania, 17325, United States</a><br><a href="https://www.google.com/maps/search/?api=1&query=Comfort+Suites%2C+945%2C+Baltimore+Pike%2C+Gettysburg%2C+Adams+County%2C+Pennsylvania%2C+17325%2C+United+States" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 09:00AM<br><a href="https://www.auctionzip.com/Listings/4113857.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_25' onchange="toggleSaleSelection('sale_25', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_4380b93ec2b3df8629c2e70969d6a949.setContent(html_de3eb0cf4f0ba6a95069d9d8d7e5cd5b);
+            
+        
+
+        marker_453962f38d80598f875db15131e165e9.bindPopup(popup_4380b93ec2b3df8629c2e70969d6a949)
+        ;
+
+        
+    
+    
+                marker_453962f38d80598f875db15131e165e9.setIcon(icon_b2073744db046241c10922a54f787861);
+            
+    
+            var marker_a58684e2f4c543a0b1da1dc943d2bf6b = L.marker(
+                [40.168947, -76.6535306],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_49ca595ba72f099aa6be49b550c94503 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_249874b222ebd67318513145688448f2 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_71a1bbbe418e3f8b399de70c619df725 = $(`<div id="html_71a1bbbe418e3f8b399de70c619df725" style="width: 100.0%; height: 100.0%;"><b>ELIZABETHTOWN 21 ACRE FARM</b><br>Public Auction: "ELIZABETHTOWN 21 ACRE FARM" by Hess Auction Group. Auction will be held on Sat Mar 28 @ 09:00AM at 230 S. Hertzler Rd. in Elizabethtown, PA 17022. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=230+S+Hertzler+Rd%2C+Elizabethtown%2C+PA+17022%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">230 S Hertzler Rd, Elizabethtown, PA 17022, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=230+S+Hertzler+Rd%2C+Elizabethtown%2C+PA+17022%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 09:00AM<br><a href="https://www.auctionzip.com/Listings/4114525.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_26' onchange="toggleSaleSelection('sale_26', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_249874b222ebd67318513145688448f2.setContent(html_71a1bbbe418e3f8b399de70c619df725);
+            
+        
+
+        marker_a58684e2f4c543a0b1da1dc943d2bf6b.bindPopup(popup_249874b222ebd67318513145688448f2)
+        ;
+
+        
+    
+    
+                marker_a58684e2f4c543a0b1da1dc943d2bf6b.setIcon(icon_49ca595ba72f099aa6be49b550c94503);
+            
+    
+            var marker_30c795cd49a9ef5566197fe648a4dd5b = L.marker(
+                [40.3262559, -77.1776611],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_a8df361ea37dc7acfcb011342b83b100 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_bf7023e980d43350bb01ef683c989f70 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a17a13ac766c7c6c3d733c0d4eb6f534 = $(`<div id="html_a17a13ac766c7c6c3d733c0d4eb6f534" style="width: 100.0%; height: 100.0%;"><b>Gold Coins</b><br>Public Auction: "Gold Coins" by Richard P Murry Auctioneer LLC. Auction will be held on Sat Mar 28 @ 10:00AM at 5532 Spring Road in Shermans Dale, PA 17090. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=5532%2C+Spring+Road%2C+Dromgold%2C+Carroll+Township%2C+Perry+County%2C+Pennsylvania%2C+17090%2C+United+States" target="_blank" style="color:#4da3ff; font-weight:bold;">5532, Spring Road, Dromgold, Carroll Township, Perry County, Pennsylvania, 17090, United States</a><br><a href="https://www.google.com/maps/search/?api=1&query=5532%2C+Spring+Road%2C+Dromgold%2C+Carroll+Township%2C+Perry+County%2C+Pennsylvania%2C+17090%2C+United+States" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 10:00AM<br><a href="https://www.auctionzip.com/Listings/4126332.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_27' onchange="toggleSaleSelection('sale_27', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_bf7023e980d43350bb01ef683c989f70.setContent(html_a17a13ac766c7c6c3d733c0d4eb6f534);
+            
+        
+
+        marker_30c795cd49a9ef5566197fe648a4dd5b.bindPopup(popup_bf7023e980d43350bb01ef683c989f70)
+        ;
+
+        
+    
+    
+                marker_30c795cd49a9ef5566197fe648a4dd5b.setIcon(icon_a8df361ea37dc7acfcb011342b83b100);
+            
+    
+            var marker_63124287e8fe9d404b80bd90a6650b25 = L.marker(
+                [40.0046826, -77.02209309999999],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_e4f02201709380b41b717cdbcf9880ea = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_acabc6526c3c6bfc6b22fec2d8e7acfe = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_976ad5f2a573d7229df1b4ab57039b81 = $(`<div id="html_976ad5f2a573d7229df1b4ab57039b81" style="width: 100.0%; height: 100.0%;"><b>3 Parcels of REAL ESTATE - Farm Tractor-skidloader</b><br>Public Auction: "3 Parcels of REAL ESTATE - Farm Tractor-skidloader" by STERMER'S AUCTION SERVICE. Auction will be held on Sat Mar 28 @ 10:00AM at 3100 Lake Meade Rd. in East Berlin, PA 17316. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=3100+Lake+Meade+Rd%2C+East+Berlin%2C+PA+17316%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">3100 Lake Meade Rd, East Berlin, PA 17316, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=3100+Lake+Meade+Rd%2C+East+Berlin%2C+PA+17316%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 10:00AM<br><a href="https://www.auctionzip.com/Listings/4113237.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_28' onchange="toggleSaleSelection('sale_28', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_acabc6526c3c6bfc6b22fec2d8e7acfe.setContent(html_976ad5f2a573d7229df1b4ab57039b81);
+            
+        
+
+        marker_63124287e8fe9d404b80bd90a6650b25.bindPopup(popup_acabc6526c3c6bfc6b22fec2d8e7acfe)
+        ;
+
+        
+    
+    
+                marker_63124287e8fe9d404b80bd90a6650b25.setIcon(icon_e4f02201709380b41b717cdbcf9880ea);
+            
+    
+            var marker_6305b742d61c0b17932d58e8990d9e6d = L.marker(
+                [40.3262559, -77.1776611],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_ac5f1e942b10b95f6f2b09a2865105d1 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_84c597ca519a4043692f3655c9ce4680 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ec02f2900f233a04f4b92845b634d44b = $(`<div id="html_ec02f2900f233a04f4b92845b634d44b" style="width: 100.0%; height: 100.0%;"><b>Coins and Currency Auction</b><br>Public Auction: "Coins and Currency Auction" by Richard P Murry Auctioneer LLC. Auction will be held on Sat Mar 28 @ 10:00AM at 5532 Spring Road in Shermans Dale, PA 17090. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=5532%2C+Spring+Road%2C+Dromgold%2C+Carroll+Township%2C+Perry+County%2C+Pennsylvania%2C+17090%2C+United+States" target="_blank" style="color:#4da3ff; font-weight:bold;">5532, Spring Road, Dromgold, Carroll Township, Perry County, Pennsylvania, 17090, United States</a><br><a href="https://www.google.com/maps/search/?api=1&query=5532%2C+Spring+Road%2C+Dromgold%2C+Carroll+Township%2C+Perry+County%2C+Pennsylvania%2C+17090%2C+United+States" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 10:00AM<br><a href="https://www.auctionzip.com/Listings/4112516.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_29' onchange="toggleSaleSelection('sale_29', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_84c597ca519a4043692f3655c9ce4680.setContent(html_ec02f2900f233a04f4b92845b634d44b);
+            
+        
+
+        marker_6305b742d61c0b17932d58e8990d9e6d.bindPopup(popup_84c597ca519a4043692f3655c9ce4680)
+        ;
+
+        
+    
+    
+                marker_6305b742d61c0b17932d58e8990d9e6d.setIcon(icon_ac5f1e942b10b95f6f2b09a2865105d1);
+            
+    
+            var marker_fd243954df66cb66c4f5734ad2fe05d2 = L.marker(
+                [40.03547210000001, -76.9445374],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_3fcb0c9be6bbc2719a3fef88d2a65440 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_f317cfddd3d61226ccbd156fec39bd5d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_29bdbc5268168aeb9f21be0965a7aca6 = $(`<div id="html_29bdbc5268168aeb9f21be0965a7aca6" style="width: 100.0%; height: 100.0%;"><b>30 Acre Farm Kubota RTV&amp; Tractor FurnitureTools</b><br>Public Auction: "30 Acre Farm, Kubota RTV& Tractor, Furniture,Tools" by Rentzels Auction Service INC.. Auction will be held on Sat Mar 28 @ 11:00AM at 120 N winding Rd in Wellsville, PA 17365. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=120+N+Winding+Rd%2C+Wellsville%2C+PA+17365%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">120 N Winding Rd, Wellsville, PA 17365, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=120+N+Winding+Rd%2C+Wellsville%2C+PA+17365%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 11:00AM<br><a href="https://www.auctionzip.com/Listings/4116750.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_30' onchange="toggleSaleSelection('sale_30', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_f317cfddd3d61226ccbd156fec39bd5d.setContent(html_29bdbc5268168aeb9f21be0965a7aca6);
+            
+        
+
+        marker_fd243954df66cb66c4f5734ad2fe05d2.bindPopup(popup_f317cfddd3d61226ccbd156fec39bd5d)
+        ;
+
+        
+    
+    
+                marker_fd243954df66cb66c4f5734ad2fe05d2.setIcon(icon_3fcb0c9be6bbc2719a3fef88d2a65440);
+            
+    
+            var marker_006b631437aebe1865610e5f3c37f5ef = L.marker(
+                [39.7529203, -76.7555872],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_5fec47ba1e95c0ce9458789dde72feff = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_288fc65cc54ac8672ccee472efcef218 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d0d0e170b27665a33c0e0a7be7d1e1ec = $(`<div id="html_d0d0e170b27665a33c0e0a7be7d1e1ec" style="width: 100.0%; height: 100.0%;"><b>COINS CURRENCY SILVER GOLD &amp; MORE!!!</b><br>Public Auction: "COINS, CURRENCY, SILVER, GOLD & MORE!!!" by Stoner's Auction. Auction will be held on Sat Mar 28 @ 12:00PM at 14738 Bonnair Road in Glen Rock, PA 17327. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=14738+Bonnair+Rd%2C+Glen+Rock%2C+PA+17327%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">14738 Bonnair Rd, Glen Rock, PA 17327, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=14738+Bonnair+Rd%2C+Glen+Rock%2C+PA+17327%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 12:00PM<br><a href="https://www.auctionzip.com/Listings/4120687.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_31' onchange="toggleSaleSelection('sale_31', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_288fc65cc54ac8672ccee472efcef218.setContent(html_d0d0e170b27665a33c0e0a7be7d1e1ec);
+            
+        
+
+        marker_006b631437aebe1865610e5f3c37f5ef.bindPopup(popup_288fc65cc54ac8672ccee472efcef218)
+        ;
+
+        
+    
+    
+                marker_006b631437aebe1865610e5f3c37f5ef.setIcon(icon_5fec47ba1e95c0ce9458789dde72feff);
+            
+    
+            var marker_f4af758f939434ad521bd2cb8f2d86d8 = L.marker(
+                [40.3370133, -76.6752843],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_03b9c089d9723e79da152972ad0d1607 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d180d937abff60d905900b3a6ccf78cc = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_9f395f3b80afb49c1a0ba06d63629a9c = $(`<div id="html_9f395f3b80afb49c1a0ba06d63629a9c" style="width: 100.0%; height: 100.0%;"><b>COUNTRY RANCH HOME W/3 BAY SHOP</b><br>Public Auction: "COUNTRY RANCH HOME W3 BAY SHOP" by Roy D. Shirk, Auctioneer. Auction will be held on Sat Mar 28 @ 12:00PM at 122 Crooked Hill Road in Hummelstown, PA 17036. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=122+Crooked+Hill+Rd%2C+Hummelstown%2C+PA+17036%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">122 Crooked Hill Rd, Hummelstown, PA 17036, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=122+Crooked+Hill+Rd%2C+Hummelstown%2C+PA+17036%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 12:00PM<br><a href="https://www.auctionzip.com/Listings/4106454.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_32' onchange="toggleSaleSelection('sale_32', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_d180d937abff60d905900b3a6ccf78cc.setContent(html_9f395f3b80afb49c1a0ba06d63629a9c);
+            
+        
+
+        marker_f4af758f939434ad521bd2cb8f2d86d8.bindPopup(popup_d180d937abff60d905900b3a6ccf78cc)
+        ;
+
+        
+    
+    
+                marker_f4af758f939434ad521bd2cb8f2d86d8.setIcon(icon_03b9c089d9723e79da152972ad0d1607);
+            
+    
+            var marker_5142ca4156b7f1eb80a4112877a7669a = L.marker(
+                [40.7247187, -77.01150969999999],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_1de13875a5c969210e0e4f0e4a6fdeae = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_4c8abff2903b817d23874aaa252ddb32 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_7354746f9825bcc9557f327404912234 = $(`<div id="html_7354746f9825bcc9557f327404912234" style="width: 100.0%; height: 100.0%;"><b>Grocery Auction</b><br>Public Auction: "Grocery Auction" by Dawn Miller Auctioneer. Auction will be held on Sat Mar 28 @ 01:00PM at Fremont Social Hall, Mill Race Road in Mt Pleasant Mills, PA 17853. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=299+Mill+Race+Rd%2C+Mt+Pleasant+Mills%2C+PA+17853%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">299 Mill Race Rd, Mt Pleasant Mills, PA 17853, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=299+Mill+Race+Rd%2C+Mt+Pleasant+Mills%2C+PA+17853%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 01:00PM<br><a href="https://www.auctionzip.com/Listings/4114252.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_33' onchange="toggleSaleSelection('sale_33', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_4c8abff2903b817d23874aaa252ddb32.setContent(html_7354746f9825bcc9557f327404912234);
+            
+        
+
+        marker_5142ca4156b7f1eb80a4112877a7669a.bindPopup(popup_4c8abff2903b817d23874aaa252ddb32)
+        ;
+
+        
+    
+    
+                marker_5142ca4156b7f1eb80a4112877a7669a.setIcon(icon_1de13875a5c969210e0e4f0e4a6fdeae);
+            
+    
+            var marker_a03c2dc26940bb4ead629a34e3083e2f = L.marker(
+                [39.9287075, -76.8501501],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_b67cbe4aeac9a2d82ce38cc06a1e56b3 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_db311632cfbca6db73fd2ebf8e746912 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c33ebf593d23f65714c443056ea4588b = $(`<div id="html_c33ebf593d23f65714c443056ea4588b" style="width: 100.0%; height: 100.0%;"><b>ANTIQUES-VINTAGE HALLOWEEN-CLOCKS-WATCHES-YARD</b><br>Public Auction: "ANTIQUES-VINTAGE HALLOWEEN-CLOCKS-WATCHES-YARD" by Thomasville Country Auction Hall. Auction will be held on Sat Mar 28 @ 04:00PM at 5250 LINCOLN HWY WEST in THOMASVILLE, PA 17364. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=5250%2C+Lincoln+Highway+West%2C+Thomasville%2C+Jackson+Township%2C+York+County%2C+Pennsylvania%2C+17364%2C+United+States" target="_blank" style="color:#4da3ff; font-weight:bold;">5250, Lincoln Highway West, Thomasville, Jackson Township, York County, Pennsylvania, 17364, United States</a><br><a href="https://www.google.com/maps/search/?api=1&query=5250%2C+Lincoln+Highway+West%2C+Thomasville%2C+Jackson+Township%2C+York+County%2C+Pennsylvania%2C+17364%2C+United+States" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 04:00PM<br><a href="https://www.auctionzip.com/Listings/4113549.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_34' onchange="toggleSaleSelection('sale_34', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_db311632cfbca6db73fd2ebf8e746912.setContent(html_c33ebf593d23f65714c443056ea4588b);
+            
+        
+
+        marker_a03c2dc26940bb4ead629a34e3083e2f.bindPopup(popup_db311632cfbca6db73fd2ebf8e746912)
+        ;
+
+        
+    
+    
+                marker_a03c2dc26940bb4ead629a34e3083e2f.setIcon(icon_b67cbe4aeac9a2d82ce38cc06a1e56b3);
+            
+    
+            var marker_44209c35b38c5a424f1a129786c67664 = L.marker(
+                [39.7529203, -76.7555872],
+                {
+}
+            ).addTo(map_beafc77d0392c40e79c934e6d0ce1b18);
+        
+    
+            var icon_9b4a1f49e38cd0201c8fd5a9328bb4a8 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "darkgreen",
+  "iconColor": "white",
+  "icon": "gavel",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_905cd05238480ff6ff40df98e7ca652c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c02d5a0cc5b78122ac6f7897dba05e9c = $(`<div id="html_c02d5a0cc5b78122ac6f7897dba05e9c" style="width: 100.0%; height: 100.0%;"><b>AntiquesCollectiblesPrimitivesToolsToysJewelry</b><br>Public Auction: "Antiques,Collectibles,Primitives,Tools,ToysJewelry" by Stoner's Auction. Auction will be held on Sat Mar 28 @ 04:00PM at 14738 Bonnair Road in Glen Rock, PA 17327. See photos and more auction details on AuctionZip.com Now.<br><br><a href="geo:0,0?q=14738+Bonnair+Rd%2C+Glen+Rock%2C+PA+17327%2C+USA" target="_blank" style="color:#4da3ff; font-weight:bold;">14738 Bonnair Rd, Glen Rock, PA 17327, USA</a><br><a href="https://www.google.com/maps/search/?api=1&query=14738+Bonnair+Rd%2C+Glen+Rock%2C+PA+17327%2C+USA" target="_blank" style="color:#4da3ff;">(Open in browser)</a><br><br>Sat Mar 28 - 04:00PM<br><a href="https://www.auctionzip.com/Listings/4120688.html?kwd=&zip=17055&category=0" target="_blank" style="color: blue">LINK TO SALE</a><br><br><div class='sale-select-wrap'><label><input type='checkbox' id='sale-check-sale_35' onchange="toggleSaleSelection('sale_35', this.checked)"> Go to this sale</label></div></div>`)[0];
+                popup_905cd05238480ff6ff40df98e7ca652c.setContent(html_c02d5a0cc5b78122ac6f7897dba05e9c);
+            
+        
+
+        marker_44209c35b38c5a424f1a129786c67664.bindPopup(popup_905cd05238480ff6ff40df98e7ca652c)
+        ;
+
+        
+    
+    
+                marker_44209c35b38c5a424f1a129786c67664.setIcon(icon_9b4a1f49e38cd0201c8fd5a9328bb4a8);
             
 </script>
 </html>
