@@ -86,7 +86,8 @@ LINKS_TO_REMOVE = ["gsalr.com", "List", "estatesales", "salesestate", "companies
 HISTORICAL_EXCEL = Path("yardsale_descriptions.xlsx")
 HISTORICAL_MATCH_SCORE = 87
 
-HIGH_PRIORITY_NAME_KEYWORDS = ["community", "neighborhood", "multi", "flea", "development"]
+HIGH_PRIORITY_NAME_KEYWORDS = ["community", "neighborhood", "flea", "development"]
+MEDIUM_PRIORITY_KEYWORDS = ["multi"]
 LOCATION_KEYWORDS = ["school", "church", "center", "building", "ymca"]
 AUCTION_KEYWORDS = ["auction", "bidding"]
 
@@ -1236,6 +1237,8 @@ def add_marker(mymap: folium.Map, event: SaleEvent, sale_id: str, popup_html: st
 
     if any(k in title_lower for k in HIGH_PRIORITY_NAME_KEYWORDS):
         icon = folium.Icon(color="red", icon="star")
+    elif any(k in title_lower for k in MEDIUM_PRIORITY_KEYWORDS):
+        icon = folium.Icon(color="blue", icon="star")
     elif any(k in location_lower for k in LOCATION_KEYWORDS):
         icon = folium.Icon(color="green", icon="home")
     elif any(k in link_lower for k in AUCTION_KEYWORDS):
